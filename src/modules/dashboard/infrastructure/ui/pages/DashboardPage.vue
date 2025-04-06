@@ -6,7 +6,7 @@
       <div class="col-3">
         <q-card class="">
           <q-card-section>
-            <div class="text-h6">Usuarios Activos</div>
+            <div class="text-h6">Casas</div>
             <div class="text-h4 text-primary">1,235</div>
           </q-card-section>
         </q-card>
