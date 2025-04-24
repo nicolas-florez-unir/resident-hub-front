@@ -9,6 +9,10 @@ COPY . .
 RUN npm ci --legacy-peer-deps
 
 RUN npm prune --omit=dev
+
+# Adicionar Quasar CLI para realizar la build
+RUN npm install -g @quasar/cli 
+
 # Copiar el resto del código
 COPY . .
 
