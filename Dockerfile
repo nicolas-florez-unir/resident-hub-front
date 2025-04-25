@@ -8,8 +8,6 @@ COPY . .
 # Instalar dependencias (el postinstall debería funcionar correctamente al detectar quasar.config.js)
 RUN npm ci --legacy-peer-deps
 
-RUN npm prune --omit=dev
-
 # Adicionar Quasar CLI para realizar la build
 RUN npm install -g @quasar/cli 
 
@@ -21,6 +19,7 @@ COPY .env.build /app/.env
 # Construir la aplicación
 RUN npm run build
 
+RUN npm prune --omit=dev
 
 FROM caddy:2-alpine
 
