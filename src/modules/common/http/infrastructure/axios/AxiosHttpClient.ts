@@ -2,12 +2,11 @@ import type { AxiosInstance, AxiosRequestConfig } from 'axios';
 import { AxiosError } from 'axios';
 import axios from 'axios';
 import { HttpClient } from '../../domain/HttpClient';
-import type { HttpClientRequestConfig } from '../../domain/HttpClient';
-import { HttpClientRequestConfigHeaders } from '../../domain/HttpClient';
 import { applicationStorage } from 'src/boot/application-storage';
 import { handleRefreshTokenFlow } from '../flows/refresh-access-token.flow';
 import { HttpClientException } from '../../domain/exceptions/http-client.exception';
 import { UnknownException } from 'src/modules/common/exceptions/unknown.exception';
+import { ApiAuthEndpoints } from 'src/modules/auth/login/infrastructure/endpoints/api/auth.endpoints';
 
 export class AxiosHttpClient extends HttpClient {
   private readonly instance: AxiosInstance = axios.create({
@@ -22,11 +21,18 @@ export class AxiosHttpClient extends HttpClient {
       (response) => response,
       async (error: AxiosError) => {
         const original = error.config as AxiosRequestConfig & { _retry?: boolean };
-        const isUnauthorized = error.response?.status === 401;
-        const isInternalRefresh =
-          original.headers?.[HttpClientRequestConfigHeaders['X-Internal-Refresh']] === 'true';
 
-        if (!isUnauthorized || original._retry || isInternalRefresh) return Promise.reject(error);
+        console.log(original);
+
+        if (
+          !this.shouldRetryRequest({
+            error,
+            url: original.url,
+            isRetry: original._retry ?? false,
+          })
+        ) {
+          return Promise.reject(error);
+        }
 
         original._retry = true;
 
@@ -40,6 +46,26 @@ export class AxiosHttpClient extends HttpClient {
     );
   }
 
+  private shouldRetryRequest(params: {
+    error: AxiosError;
+    url: string | undefined;
+    isRetry: boolean;
+  }): boolean {
+    // Si no hay URL o es un reintento, no se debe volver a intentar
+    if (params.url === undefined || params.isRetry) return false;
+
+    const ignoredEndpoints = [ApiAuthEndpoints.LOGIN, ApiAuthEndpoints.REFRESH_ACCESS_TOKEN];
+    console.log(ignoredEndpoints);
+    const isIgnoredEndpoint = ignoredEndpoints.some((endpoint) => params.url?.includes(endpoint));
+
+    // Si la URL es una de las que no se deben volver a intentar, no se debe volver a intentar
+    if (isIgnoredEndpoint) return false;
+
+    // Se reintenta si el error es 401 y no es un reintento
+    const isUnauthorized = params.error.response?.status === 401;
+    return isUnauthorized;
+  }
+
   async get<T>(url: string, params?: object): Promise<T> {
     const result = await this.instance.get<T>(url, {
       params,
@@ -50,7 +76,11 @@ export class AxiosHttpClient extends HttpClient {
     return result.data;
   }
 
-  async post<T>(url: string, body: object, config?: HttpClientRequestConfig): Promise<T> {
+  async post<T>(
+    url: string,
+    body: object,
+    config?: { headers: Record<string, string> },
+  ): Promise<T> {
     try {
       const result = await this.instance.post<T>(url, body, {
         headers: {

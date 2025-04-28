@@ -10,6 +10,7 @@ export async function handleRefreshTokenFlow(): Promise<string | null> {
 
   try {
     const { accessToken, user } = await refreshAccessTokenUseCase.handle();
+    console.log({ accessToken, user });
     authStore.login(user, accessToken);
     return accessToken;
   } catch {
