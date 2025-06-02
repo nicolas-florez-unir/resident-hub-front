@@ -75,6 +75,7 @@
                 :rules="[(val) => !!val || 'Password is required']"
                 lazy-rules
               />
+              <div v-if="errorMessage" class="text-negative q-mb-md">{{ errorMessage }}</div>
               <div class="row justify-end">
                 <q-btn type="reset" label="Reset" color="secondary" flat />
                 <q-btn type="submit" label="Login" color="primary" />
@@ -94,10 +95,12 @@ import { useRouter } from 'vue-router';
 import { useQuasar } from 'quasar';
 import { LoginUseCase } from 'auth/login/application/use-cases';
 import { useAuthStore } from 'common/infrastructure/stores/auth.store';
+import { UserRole } from 'user/domain/enums';
 
 const router = useRouter();
 const store = useAuthStore();
 const $q = useQuasar();
+const errorMessage = ref('');
 
 const loginUseCase = applicationContainer.getFromContainer(LoginUseCase);
 
@@ -108,12 +111,24 @@ const form = reactive({
 
 const onSubmit = async () => {
   $q.loading.show();
+  errorMessage.value = '';
   try {
     const { user, accessToken } = await loginUseCase.handle(form.email, form.password);
     store.login(user, accessToken);
-    await router.replace('/');
+    if (user.getRole() === UserRole.Administrator) {
+      await router.replace('/PageIniAdministrador');
+    } else if (user.getRole() === UserRole.HouseOwner) {
+      await router.replace('/PageIniPropietario');
+    } else {
+      await router.replace('/');
+    }    
   } catch (error) {
-    console.log(error);
+    if (error?.message?.toLowerCase().includes('unauthorized') || error?.statusCode === 401) {
+      errorMessage.value = 'Contraseña o usuario incorrecto';
+    } else {
+      errorMessage.value = 'Error al iniciar sesión';
+    }
+    
   } finally {
     $q.loading.hide();
   }
