@@ -4,36 +4,40 @@
 
     <q-drawer elevated v-model="leftDrawerOpen" show-if-above :width="300" :breakpoint="800">
       <q-scroll-area style="height: calc(100% - 80px); margin-bottom: 80px">
-        <q-list class="flex column q-pa-md" style="gap: 12px">
-          <q-img
-            src="/banner.png"
-            spinner-color="white"
-            class="company-icon full-width full-height rounded-borders shadow-2"
-            fit="cover"
-          />
-          <q-item
-            clickable
-            v-ripple
-            v-for="item in filteredOptions"
-            :key="item.route"
-            :to="{ name: item.route }"
-          >
-            <q-item-section avatar>
-              <q-icon :name="item.icon" />
-            </q-item-section>
+      <q-list class="flex column q-pa-md" style="gap: 12px">
+        <q-img
+          src="/banner.png"
+          spinner-color="white"
+          class="company-icon full-width full-height rounded-borders shadow-2"
+          fit="cover"
+        />
+        <q-item
+          v-for="item in filteredOptions.filter(opt => !!opt.route)"
+          :key="item.route ?? item.label"
+          clickable
+          v-ripple
+          :to="{ name: item.route }"
+        >
+          <q-item-section avatar>
+            <q-icon :name="item.icon" />
+          </q-item-section>
+          <q-item-section> {{ item.label }} </q-item-section>
+        </q-item>
 
-            <q-item-section> {{ item.label }} </q-item-section>
-          </q-item>
-
-          <q-item clickable v-ripple @click="logout">
-            <q-item-section avatar>
-              <q-icon name="logout" color="red" />
-            </q-item-section>
-
-            <q-item-section> Logout </q-item-section>
-          </q-item>
-        </q-list>
-      </q-scroll-area>
+        <q-item
+          v-if="filteredOptions.some(opt => opt.action === 'logout')"
+          clickable
+          v-ripple
+          @click="logout"
+          key="logout"
+        >
+          <q-item-section avatar>
+            <q-icon name="logout" color="red" />
+          </q-item-section>
+          <q-item-section> Cerrar sesión </q-item-section>
+        </q-item>
+      </q-list>      
+</q-scroll-area>
 
       <div class="absolute-bottom" style="height: 80px">
         <q-separator />
@@ -69,22 +73,54 @@ import HomeHeader from '../components/HomeHeader.vue';
 
 const options = [
   {
-    icon: 'dashboard',
-    label: 'Dashboard',
-    route: PrivateRoutesName.Dashboard,
+    icon: 'person_add',
+    label: 'Creación de propietarios',
+    route: PrivateRoutesName.CrearPropietario,
+    roles: [UserRole.Administrator],    
+  },
+  {
+    icon: 'home_work',
+    label: 'Registrar propiedades',
+    route: PrivateRoutesName.RegistrarPropiedad,
+    roles: [UserRole.Administrator],    
+  },
+  {
+    icon: 'description',
+    label: 'Documentos administrativos',
+    route: PrivateRoutesName.DocumentosAdministrativos,
     roles: [UserRole.Administrator],
   },
   {
-    icon: 'person',
-    label: 'Perfil',
-    route: PrivateRoutesName.Profile,
-  },
-  {
-    icon: 'room_preferences',
-    label: 'Condominio',
-    route: PrivateRoutesName.Condominium,
+    icon: 'gavel',
+    label: 'Generar multas',
+    route: PrivateRoutesName.GenerarMultas,
     roles: [UserRole.Administrator],
   },
+  {
+    icon: 'question_answer',
+    label: 'Visualizar PQRS',
+    route: PrivateRoutesName.VisualizarPQRS,
+    roles: [UserRole.Administrator],
+  },
+  {
+    icon: 'event',
+    label: 'Agendar Reuniones',
+    route: PrivateRoutesName.AgendarReuniones,
+    roles: [UserRole.Administrator],
+  },
+  {
+    icon: 'logout',
+    label: 'Cerrar sesión',
+    action: 'logout',
+    color: 'red',
+  },
+  {
+    icon: 'home',
+    label: 'Home',
+    route: PrivateRoutesName.PageInicioAdmin,
+    roles: [UserRole.Administrator],
+  },
+
 ];
 
 const leftDrawerOpen = ref(true);
@@ -100,8 +136,6 @@ const filteredOptions = options.filter((option) => {
 
   return true;
 });
-
-$router.replace({ name: filteredOptions[0]?.route }).catch(() => {});
 
 function toggleLeftDrawer() {
   leftDrawerOpen.value = !leftDrawerOpen.value;

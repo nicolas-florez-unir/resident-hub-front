@@ -7,14 +7,18 @@ import {
   createWebHistory,
 } from 'vue-router';
 import authRoutes, { PublicRoutesName } from './auth-routes';
-import privateRoutes, { PrivateRoutesName } from './private-routes';
+import privateRoutes, { PrivateRoutesName } from 'src/router/private-routes'; // Importa las rutas privadas
 import { useAuthStore } from 'src/modules/common/infrastructure/stores/auth.store';
 import ErrorNotFound from 'src/modules/common/infrastructure/ui/pages/ErrorNotFound.vue';
 import UnknownErrorPage from 'src/modules/common/infrastructure/ui/pages/UnknownErrorPage.vue';
 
 const routes: RouteRecordRaw[] = [
   {
-    path: '/auth',
+    path: '/',
+    redirect: { name: PublicRoutesName.Login }, // Redirige a la página de login por defecto
+  },
+  {
+    path: '/',
     children: authRoutes,
     meta: { requiresGuest: true },
   },
@@ -64,12 +68,12 @@ export default defineRouter(function (/* { store, ssrContext } */) {
     const store = useAuthStore();
 
     if (to.meta.requiresAuth && !store.isAuthenticated) {
-      next(PublicRoutesName.Login); // Si la ruta es privada y no está autenticado, redirige a login
+      next({ name: PublicRoutesName.Login }); // Si la ruta es privada y no está autenticado, redirige a login
       return;
     }
 
     if (to.meta.requiresGuest && store.isAuthenticated) {
-      next(PrivateRoutesName.Home); // Si la ruta es solo para invitados y está autenticado, redirige al dashboard
+      next({ name: PrivateRoutesName.PageInicioAdmin }); // Si la ruta es solo para invitados y está autenticado, redirige al dashboard
       return;
     }
 
