@@ -67,13 +67,15 @@ export default defineRouter(function (/* { store, ssrContext } */) {
   Router.beforeEach((to, from, next) => {
     const store = useAuthStore();
 
-    if (to.meta.requiresAuth && !store.isAuthenticated) {
-      next({ name: PublicRoutesName.Login }); // Si la ruta es privada y no está autenticado, redirige a login
-      return;
-    }
+   // Si la ruta es privada y no está autenticado, redirige a login 
+   // if (to.meta.requiresAuth && !store.isAuthenticated) {
+   //   next({ name: PublicRoutesName.Login }); 
+   //   return;
+   // }
 
+   // Si la ruta es solo para invitados y está autenticado, redirige al dashboard
     if (to.meta.requiresGuest && store.isAuthenticated) {
-      next({ name: PrivateRoutesName.PageInicioAdmin }); // Si la ruta es solo para invitados y está autenticado, redirige al dashboard
+      next({ name: PrivateRoutesName.PageInicioAdmin }); 
       return;
     }
 
