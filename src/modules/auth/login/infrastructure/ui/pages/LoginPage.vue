@@ -1,14 +1,14 @@
 <template>
   <q-layout view="lHh Lpr lFf">      
     <q-page-container>
-    <q-page class="login-page">
+    <q-page class="custom-page flex flex-center">
       <div class="login-tittle"> <h1 class="login-tittle-h1">ResidentHub</h1> </div>"
       <q-card class="login-card">
         <q-card-section>
           <q-form @submit="onSubmit" class="q-gutter-md">
             <div class="welcome-text text-center">Bienvenido</div>
-            <q-input v-model="form.email" label="Email" type="email" outlined />
-            <q-input v-model="form.password" label="Password" outlined type="password" />
+            <q-input class="input-text" v-model="form.email" label="Email" type="email" outlined />
+            <q-input class="input-text" v-model="form.password" label="Password" outlined type="password" />
             <div v-if="errorMessage" class="text-negative q-mb-md">{{ errorMessage }}</div>
             <div class="row justify-end">
               <q-btn type="submit" label="Login" class="login-btn" />
@@ -83,53 +83,71 @@ const onSubmit = async () => {
 
 </script>
 
-<style scoped lang="sass">
-/* Fondo blanco */
-.login-page
-  background-color: #ffffff
-  display: flex
-  flex-direction: column
-  align-items: center
-  justify-content: center
-  height: 100vh
+<style scoped>
+.custom-page {
+  background-color: var(--background-color);
+  color: var(--text-primary);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.login-title {
+  margin-bottom: 20px;
+  text-align: center;
+}
+.login-title-h1 {
+  color: var(--primary-color);
+  font-size: 2.5rem;
+  font-weight: bold;
+}
+.login-card {
+  background-color: var(--background-color-cards);
+  width: 400px;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--border-color-dark);
+}
+.welcome-text {
+  color: var(--primary-color);
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 20px;
+  text-align: center;
+}
+.login-btn {
+  background-color: var(--primary-color);
+  color: #fff;
+  width: 100%;
+}
+.login-btn:hover {
+  background-color: var(--secondary-color);
+}
+.input-text :deep(.q-field__control){
+  background-color: var(--background-color)!important;
 
-/* Título centrado */
-.login-title
-  margin-bottom: 20px
-  text-align: center
+  transition: box-shadow 0.2s, border-color 0.2s, background-color 0.2s;
+  border-radius: 6px;
+  border: 1px solid var(--border-color, #e0e0e0);
+  box-shadow: none;
+}
+.input-text :deep(.q-field__control:hover),
+.input-text :deep(.q-field__control:focus-within) {
+  box-shadow: 0 0 0 2px var(--primary-color, #1976d2);
+  border-color: var(--primary-color, #1976d2);
+  background-color: var(--background-color) !important;
+}
+.input-text :deep(input) {
+  background: transparent !important;
+  color: var(--text-primary);
+  box-shadow: none;
+}
 
-.login-tittle-h1
-  color: #0b2c47
-  font-size: 2.5rem
-  font-weight: bold
-
-/* Panel de Login */
-.login-card
-  background-color: #29a3ff
-  width: 400px // Ancho para un correo largo
-  padding: 30px
-  border-radius: 10px
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2)
-
-/* Texto Bienvenido centrado */
-.welcome-text
-  color: #0b2c47
-  font-size: 1.5rem
-  font-weight: bold
-  margin-bottom: 20px
-  text-align: center
-
-/* Botón de Login */
-.login-btn
-  background-color: #0b2c47
-  color: #ffffff
-  width: 100% // Botón ocupa todo el ancho
-
-.login-btn:hover
-  background-color: #092235
-
-/* Ajustes responsivos */
-@media (max-width: 600px)
-  .login-card
-    width: 90%
+@media (max-width: 600px) {
+  .login-card {
+    width: 90%;
+  }
+}
 </style>

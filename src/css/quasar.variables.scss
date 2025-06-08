@@ -3,3 +3,26 @@
 
 $dark-shadow-color: #000 !default;
 $generic-border-radius: 8px !default;
+
+// Paleta personalizada
+$primary-color: #0b2c47 !default;      // Azul oscuro principal
+$secondary-color: #145da0 !default;    // Azul medio
+$accent-color: #29a3ff !default;       // Azul claro/acento
+$background-color: #f8f9fa !default;   // Fondo claro 
+$background-color-cards: #29a3ff !default; // Fondo de paneles o tarjetas
+$background-color-view: #29a3ff !default; // Fondo de vistas
+$surface-color: #ffffff !default;      // Paneles y tarjetas
+$text-primary: #1c1c1c !default;       // Texto principal
+$text-secondary: #555555 !default;     // Texto secundario
+$border-color: #d0d0d0 !default;       // Bordes suaves
+$border-color-dark:#0b2c47 !default; // Bordes oscuros
+
+// Sobrescribe los colores de Quasar
+$primary: $primary-color;
+$secondary: $secondary-color;
+$accent: $accent-color;
+$dark: $text-primary;
+$info: $secondary-color;
+$positive: $accent-color;
+$negative: #e53935;
+$warning: #fbc02d;

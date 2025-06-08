@@ -6,3 +6,22 @@
 .body--light .q-header {
     background-color: var(--q-primary);
 }
+
+:root {
+  --primary-color: #0b2c47;
+  --secondary-color: #145da0;
+  --accent-color: #29a3ff;
+  --background-color: #f8f9fa;
+  --surface-color: #ffffff;
+  --text-primary: #1c1c1c;
+  --text-secondary: #555555;
+  --border-color: #d0d0d0;
+  --background-color-cards:#29a3ff;
+  --background-color-view:#29a3ff;
+  --border-color-dark:#0b2c47;
+}
+
+body {
+  background-color: var(--background-color);
+  color: var(--text-primary);
+}

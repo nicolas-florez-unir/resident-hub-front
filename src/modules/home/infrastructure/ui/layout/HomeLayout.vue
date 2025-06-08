@@ -73,6 +73,18 @@ import HomeHeader from '../components/HomeHeader.vue';
 
 const options = [
   {
+    icon: 'home',
+    label: 'Inicio Admin',
+    route: PrivateRoutesName.PageInicioAdmin,
+    roles: [UserRole.Administrator],
+  },  
+  {
+    icon: 'home',
+    label: 'Inicio Propietario',
+    route: PrivateRoutesName.PageInicioPropietario,
+    roles: [UserRole.HouseOwner],
+  },    
+  {
     icon: 'person_add',
     label: 'Creación de propietarios',
     route: PrivateRoutesName.CrearPropietario,
@@ -113,12 +125,7 @@ const options = [
     label: 'Cerrar sesión',
     action: 'logout',
     color: 'red',
-  },
-  {
-    icon: 'home',
-    label: 'Home',
-    route: PrivateRoutesName.PageInicioAdmin,
-    roles: [UserRole.Administrator],
+    roles: [UserRole.Administrator, UserRole.HouseOwner],
   },
 
 ];
@@ -127,11 +134,26 @@ const leftDrawerOpen = ref(true);
 const authStore = useAuthStore();
 const $router = useRouter();
 
+
+// Simulación de un usuario autenticado para pruebas - OJO SE DEBE QUITAR ESTE FRAGMENTO AL DESPLEJAR LA PAGINA
+authStore.user = {
+  getId: () => 1, // Devuelve un ID simulado
+  getEmail: () => "usuario@prueba.com", // Correo simulado
+  getFirstName: () => "Usuario", // Nombre simulado
+  getLastName: () => "Prueba", // Apellido simulado
+  getPhone: () => "123456789", // Teléfono simulado
+  getRole: () => UserRole.HouseOwner, // Cambia entre HouseOwner y Administrator
+  getFullName: function () {
+    return `${this.getFirstName()} ${this.getLastName()}`; // Construcción del nombre completo
+  },
+};
+// Simulación de un usuario autenticado para pruebas - OJO SE DEBE QUITAR ESTE FRAGMENTO AL DESPLEJAR LA PAGINA
+
 const filteredOptions = options.filter((option) => {
   if (!authStore.user) return false;
 
   if (option.roles) {
-    return option.roles.includes(authStore.user.getRole());
+    return option.roles.includes(authStore.user.getRole());    
   }
 
   return true;
