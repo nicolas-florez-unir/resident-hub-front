@@ -72,17 +72,12 @@ import { UserRole } from 'user/domain/enums';
 import HomeHeader from '../components/HomeHeader.vue';
 
 const options = [
+  //Opciones del administrador 
   {
     icon: 'home',
     label: 'Inicio Admin',
     route: PrivateRoutesName.PageInicioAdmin,
     roles: [UserRole.Administrator],
-  },  
-  {
-    icon: 'home',
-    label: 'Inicio Propietario',
-    route: PrivateRoutesName.PageInicioPropietario,
-    roles: [UserRole.HouseOwner],
   },    
   {
     icon: 'person_add',
@@ -120,13 +115,58 @@ const options = [
     route: PrivateRoutesName.AgendarReuniones,
     roles: [UserRole.Administrator],
   },
+
+  //Opciones del propietario
+  {
+    icon: 'home',
+    label: 'Home / Inicio',
+    route: PrivateRoutesName.PageInicioPropietario,
+    roles: [UserRole.HouseOwner],
+  },    
+
+  {
+    icon: 'person',
+    label: 'Perfil',
+    route: PrivateRoutesName.PerfilPropietario,
+    roles: [UserRole.HouseOwner],
+  },    
+  
+  {
+    icon: 'description',
+    label: 'Documentos',
+    route: PrivateRoutesName.DocumentosPropietario,
+    roles: [UserRole.HouseOwner],
+  },    
+  
+  {
+    icon: 'gavel',
+    label: 'Multas',
+    route: PrivateRoutesName.MultasPropietario,
+    roles: [UserRole.HouseOwner],
+  },    
+  
+  {
+    icon: 'event',
+    label: 'Reuniones',
+    route: PrivateRoutesName.ReunionesPropietario,
+    roles: [UserRole.HouseOwner],
+  },    
+  
+  {
+    icon: 'question_answer',
+    label: 'PQRS',
+    route: PrivateRoutesName.PQRSPropietario,
+    roles: [UserRole.HouseOwner],
+  },      
+
+  //Opcion cumún para todos los usuarios
   {
     icon: 'logout',
     label: 'Cerrar sesión',
     action: 'logout',
     color: 'red',
     roles: [UserRole.Administrator, UserRole.HouseOwner],
-  },
+  },  
 
 ];
 

@@ -6,12 +6,12 @@
       <q-card class="login-card">
         <q-card-section>
           <q-form @submit="onSubmit" class="q-gutter-md">
-            <div class="welcome-text text-center">Bienvenido</div>
+            <div class="welcome-text text-center">Bienvenidos</div>
             <q-input class="input-text" v-model="form.email" label="Email" type="email" outlined />
             <q-input class="input-text" v-model="form.password" label="Password" outlined type="password" />
             <div v-if="errorMessage" class="text-negative q-mb-md">{{ errorMessage }}</div>
             <div class="row justify-end">
-              <q-btn type="submit" label="Login" class="login-btn" />
+              <q-btn type="submit" label="Iniciar Sesión" class="login-btn" />
             </div>
           </q-form>
         </q-card-section>
