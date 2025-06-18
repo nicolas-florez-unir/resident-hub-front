@@ -1,10 +1,10 @@
 import type { RouteRecordRaw } from 'vue-router';
 import HomeLayout from 'src/modules/home/infrastructure/ui/layout/HomeLayout.vue';
 import PageInicioAdmin from 'src/modules/dashboard/infrastructure/ui/pages/PageInicioAdmin.vue';
-import CrearPropietario from 'src/modules/dashboard/infrastructure/ui/pages/CrearPropietario.vue';
-import RegistrarPropiedad from 'src/modules/dashboard/infrastructure/ui/pages/RegistrarPropiedad.vue';
+import CrearPropietario from 'src/modules/user/infrastructure/ui/pages/CrearPropietario.vue';
+import RegistrarPropiedad from 'src/modules/property/infraestructure/ui/pages/RegistrarPropiedad.vue';
 import DocumentosAdministrativos from 'src/modules/dashboard/infrastructure/ui/pages/DocumentosAdministrativos.vue';
-import GenerarMultas from 'src/modules/dashboard/infrastructure/ui/pages/GenerarMultas.vue';
+import GenerarMultas  from 'src/modules/dashboard/infrastructure/ui/pages/GenerarMultas.vue';
 import VisualizarPQRS from 'src/modules/dashboard/infrastructure/ui/pages/VisualizarPQRS.vue';
 import AgendarReuniones from 'src/modules/dashboard/infrastructure/ui/pages/AgendarReuniones.vue';
 
@@ -15,6 +15,8 @@ import DocumentosPropietario from 'src/modules/dashboard/infrastructure/ui/pages
 import MultasPropietario from 'src/modules/dashboard/infrastructure/ui/pages/MultasPropietario.vue';
 import PQRSPropietario from 'src/modules/dashboard/infrastructure/ui/pages/PqrsPropietario.vue';
 import ReunionesPropietario from 'src/modules/dashboard/infrastructure/ui/pages/ReunionesPropietario.vue';
+import CondominiumPage from 'src/modules/condominium/infrastructure/ui/pages/CondominiumPage.vue';
+
 
 
 export enum PrivateRoutesName {
@@ -33,6 +35,7 @@ export enum PrivateRoutesName {
   GenerarMultas = 'GenerarMultas',
   VisualizarPQRS = 'VisualizarPQRS',
   AgendarReuniones = 'AgendarReuniones',
+  CondominiumPage = 'CondominiumPage',
 }
 
 const privateRoutes: RouteRecordRaw[] = [
@@ -48,6 +51,7 @@ const privateRoutes: RouteRecordRaw[] = [
       { path: 'generar-multas', name: PrivateRoutesName.GenerarMultas, component: GenerarMultas },
       { path: 'visualizar-pqrs', name: PrivateRoutesName.VisualizarPQRS, component: VisualizarPQRS },
       { path: 'agendar-reuniones', name: PrivateRoutesName.AgendarReuniones, component: AgendarReuniones },
+      { path: 'gestionar-condominio', name: PrivateRoutesName.CondominiumPage, component: CondominiumPage },
       //Rutas del propietario
       { path: 'inicio-propietario', name: PrivateRoutesName.PageInicioPropietario, component: PageInicioPropietario },      
       { path: 'perfil-propietario', name: PrivateRoutesName.PerfilPropietario, component: PerfilPropietario },

@@ -6,6 +6,9 @@ export class UpdateUserDto {
     private readonly lastName: string,
     private readonly phone: string,
     private readonly role: string,
+    private readonly password: string,
+    private readonly tipoDeIdentificacion: string,
+    private readonly numeroDeIdentificacion: number,
   ) {}
 
   public getId(): number {
@@ -30,6 +33,18 @@ export class UpdateUserDto {
 
   public getRole(): string {
     return this.role;
+  }
+
+  public getTipoDeIdentificacion(): string{
+    return this.tipoDeIdentificacion;
+  }
+
+  public getNumeroDeIdentificacion(): number{
+    return this.numeroDeIdentificacion;
+  }
+
+  public getPassword(): string{
+     return this.password;
   }
 
   public getFullName(): string {

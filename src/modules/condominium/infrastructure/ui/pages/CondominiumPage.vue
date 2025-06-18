@@ -5,12 +5,15 @@
     <q-form class="q-gutter-md" @submit="onSubmit">
       <q-input v-model="name" filled label="Name" type="text" />
       <q-input v-model="address" filled label="Address" type="text" />
-      <q-btn label="Submit" type="submit" color="primary" />
+      <q-card-actions align="right">
+          <BotonGuardar />
+      </q-card-actions>
     </q-form>
   </q-page>
 </template>
 <script lang="ts" setup>
 import { applicationContainer } from 'src/boot';
+import BotonGuardar from 'src/modules/common/ui/components/buttons/BotonGuardar.vue';
 import { UpdateCondominiumLogoUseCase } from 'condominium/application/use-cases';
 import { useQuasar } from 'quasar';
 import { ref } from 'vue';
@@ -45,7 +48,7 @@ const onSubmit = async () => {
 };
 </script>
 
-<style lang="css">
+<style scoped>
 .btn-edit-logo {
   top: 6px;
   right: 6px;

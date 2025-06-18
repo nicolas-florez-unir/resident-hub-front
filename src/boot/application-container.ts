@@ -14,6 +14,9 @@ import { UpdateCondominiumLogoUseCase } from 'src/modules/condominium/applicatio
 import { CondominiumRepository } from 'src/modules/condominium/domain/repositories/condominium.repository';
 import { ApiCondominiumRepository } from 'src/modules/condominium/infrastructure/repositories/api-condominium.repository';
 import { UpdateUserUseCase } from 'src/modules/user/application/use-cases/update-user.use-case';
+import { DeleteUserUseCase } from 'src/modules/user/application/use-cases/delete-user.use-case';
+import { CreateUserUseCase } from 'src/modules/user/application/use-cases/create-user.use-case';
+import { ReadUserUseCase } from 'src/modules/user/application/use-cases/read-user.use-case';
 import { UserRepository } from 'src/modules/user/domain/repositories';
 import { ApiUserRepository } from 'src/modules/user/infrastructure/repositories';
 
@@ -45,6 +48,9 @@ class ApplicationContainer {
   private readonly useCases: Array<ServiceIdentifier> = [
     LoginUseCase,
     UpdateUserUseCase,
+    DeleteUserUseCase,
+    CreateUserUseCase,
+    ReadUserUseCase,
     UpdateCondominiumLogoUseCase,
     GetCondominiumInfoUseCase,
     RefreshAccessTokenUseCase,

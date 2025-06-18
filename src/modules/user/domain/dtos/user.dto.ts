@@ -5,4 +5,7 @@ export interface UserDto {
   lastName: string;
   phone: string;
   role: string;
+  password: string;
+  tipoDeIdentificacion: string;
+  numeroDeIdentificacion: number;
 }

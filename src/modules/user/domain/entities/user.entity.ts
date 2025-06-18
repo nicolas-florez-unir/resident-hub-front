@@ -8,6 +8,9 @@ export class UserEntity {
     private readonly lastName: string,
     private readonly phone: string,
     private readonly role: UserRole,
+    private readonly password: string,
+    private readonly tipoDeIdentificacion: string,
+    private readonly numeroDeIdentificacion: number,
   ) {}
 
   public getId(): number {
@@ -37,4 +40,17 @@ export class UserEntity {
   public getFullName(): string {
     return `${this.firstName} ${this.lastName}`;
   }
+
+  public getPassword(): string {
+    return ''; // Password should not be exposed
+  }
+
+  public getTipoDeIdentificacion(): string {
+    return this.tipoDeIdentificacion;
+  }
+
+  public getNumeroDeIdentificacion(): number {
+    return this.numeroDeIdentificacion;
+  }
+
 }

@@ -78,16 +78,21 @@ const options = [
     label: 'Inicio Admin',
     route: PrivateRoutesName.PageInicioAdmin,
     roles: [UserRole.Administrator],
-  },    
+  },  
+  { icon: 'apartment', 
+    label: 'Condominio', 
+    route: PrivateRoutesName.CondominiumPage, 
+    roles: [UserRole.Administrator] 
+  },
   {
     icon: 'person_add',
-    label: 'Creación de propietarios',
+    label: 'Gestión de propietarios',
     route: PrivateRoutesName.CrearPropietario,
     roles: [UserRole.Administrator],    
   },
   {
     icon: 'home_work',
-    label: 'Registrar propiedades',
+    label: 'Administrar propiedades',
     route: PrivateRoutesName.RegistrarPropiedad,
     roles: [UserRole.Administrator],    
   },
@@ -183,6 +188,9 @@ authStore.user = {
   getLastName: () => "Prueba", // Apellido simulado
   getPhone: () => "123456789", // Teléfono simulado
   getRole: () => UserRole.HouseOwner, // Cambia entre HouseOwner y Administrator
+  getNumeroDeIdentificacion: () => 123456789, // Número de identificación simulado
+  getTipoDeIdentificacion: () => "Cédula", // Tipo de identificación simulado   
+  getPassword: () => "password123", // Contraseña simulada   
   getFullName: function () {
     return `${this.getFirstName()} ${this.getLastName()}`; // Construcción del nombre completo
   },

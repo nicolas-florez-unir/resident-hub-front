@@ -1,0 +1,1 @@
+export {PropertyEntity} from './Property.entity';
