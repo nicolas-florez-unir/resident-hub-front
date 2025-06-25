@@ -180,23 +180,6 @@ const authStore = useAuthStore();
 const $router = useRouter();
 
 
-// Simulación de un usuario autenticado para pruebas - OJO SE DEBE QUITAR ESTE FRAGMENTO AL DESPLEJAR LA PAGINA
-authStore.user = {
-  getId: () => 1, // Devuelve un ID simulado
-  getEmail: () => "usuario@prueba.com", // Correo simulado
-  getFirstName: () => "Usuario", // Nombre simulado
-  getLastName: () => "Prueba", // Apellido simulado
-  getPhone: () => "123456789", // Teléfono simulado
-  getRole: () => UserRole.HouseOwner, // Cambia entre HouseOwner y Administrator
-  getNumeroDeIdentificacion: () => 123456789, // Número de identificación simulado
-  getTipoDeIdentificacion: () => "Cédula", // Tipo de identificación simulado   
-  getPassword: () => "password123", // Contraseña simulada   
-  getFullName: function () {
-    return `${this.getFirstName()} ${this.getLastName()}`; // Construcción del nombre completo
-  },
-};
-// Simulación de un usuario autenticado para pruebas - OJO SE DEBE QUITAR ESTE FRAGMENTO AL DESPLEJAR LA PAGINA
-
 const filteredOptions = options.filter((option) => {
   if (!authStore.user) return false;
 

@@ -7,7 +7,7 @@ import { UserRoleMapper } from './user-role.mapper';
 export class UserEntityMapper {
   static toEntity(dto: UserDto | UserUpdatedDto): UserEntity {
     return new UserEntity(
-      'id' in dto ? dto.id : 0, // Aseguramos que `id` sea manejado correctamente
+      'id' in dto ? dto.id : 0, 
       dto.email,
       dto.firstName,
       dto.lastName,

@@ -6,7 +6,7 @@ export interface ReadUserDto {
   email: string; // Correo electrónico del usuario
   firstName: string; // Nombre del usuario
   lastName: string; // Apellido del usuario
-  phone: string; // Teléfono del usuario
+  phone: number; // Teléfono del usuario
   role: string; // Rol del usuario (ej. admin, user, etc.)
   password: string; // Contraseña del usuario
   tipoDeIdentificacion: string; // Tipo de identificación (ej. DNI, pasaporte)

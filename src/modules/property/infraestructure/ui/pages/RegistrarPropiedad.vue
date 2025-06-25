@@ -1,87 +1,122 @@
 <template>
-  <q-page class="q-pa-md">
-    <div class="col-12 col-md-10 col-lg-8">
-      <q-card
-        flat
-        bordered
-        class="row items-center no-shadow full-width full-height q-px-md q-py-sm"
-      >
-        <q-item-section avatar>
-          <q-avatar color="blue">
-            {{ form.id ? form.id.toString().charAt(0) : 'P' }}
-          </q-avatar>
-        </q-item-section>
-        <div class="col overflow-hidden">
-          <div class="text-h5 ellipsis">Gestión de Propiedades</div>
-          <div class="text-grey-6 text-h6 ellipsis">Registro y administración</div>
-        </div>
-      </q-card>
-
+  <q-page class="custom-page q-pa-lg">
+    <div class="column items-center q-gutter-xl">
       <!-- Formulario -->
-      <q-form @submit="onSubmit" class="q-mt-md">
-        <div class="row q-col-gutter-md">
-          <div class="col-12 col-md-6">
-            <q-input v-model="form.noUnidad" filled label="No Unidad Residencial" />
-          </div>
-          <div class="col-12 col-md-6">
-            <q-select
-              v-model="form.propietario"
-              :options="propietarios.map(p => ({ label: p.nombre, value: p.id }))"
-              filled
-              label="Seleccione Propietario"
-            />
-          </div>
-          <div class="col-12">
-            <q-input v-model="form.memo" filled label="Características" type="textarea" />
-          </div>
-        </div>
-
-        <q-card-actions>
-          <BotonGuardar />
-        </q-card-actions>
-      </q-form>
+      <div class="col-12 col-md-6 form-container">
+        <q-card class="form-card">
+          <q-card-section>
+            <div class="text-h5 text-bold text-center q-mb-lg form-title">
+              Registro de Propiedad
+            </div>
+            <q-form @submit.prevent="saveProperty">
+              <div class="q-gutter-md">
+                <!-- No. Unidad Residencial -->
+                <div class="row items-center">
+                  <div class="col-5 label">No. Unidad Residencial:</div>
+                  <div class="col-7">
+                    <q-input
+                      v-model="form.noUnidad"
+                      outlined
+                      dense
+                      class="input"
+                      :rules="[val => !!val || 'Campo requerido']"
+                      error-message="Campo obligatorio"
+                    />
+                  </div>
+                </div>
+                <!-- Propietario -->
+                <div class="row items-center q-mt-md">
+                  <div class="col-5 label">Propietario:</div>
+                  <div class="col-7">
+                    <q-select
+                      v-model="form.propietario"
+                      :options="propietariosOptions"
+                      color="primary"
+                      outlined
+                      dense
+                      map-options
+                      class="input"
+                      emit-value
+                      :rules="[val => !!val || 'Campo requerido']"
+                    />
+                  </div>
+                </div>
+                <!-- Características -->
+                <div class="row items-center q-mt-md">
+                  <div class="col-5 label">Características:</div>
+                  <div class="col-7">
+                    <q-input
+                      v-model="form.memo"
+                      type="textarea"
+                      rows="3"
+                      outlined
+                      dense
+                      class="input"
+                      placeholder="Características de la propiedad"
+                    />
+                  </div>
+                </div>
+              </div>
+              <!-- Guardar y Limpiar -->
+                <div class="row justify-center q-mt-lg ">
+                  <BotonGuardar
+                    label="Guardar"
+                    type="submit"
+                    class="q-mr-sm"
+                    :disabled="!form.noUnidad || !form.propietario"
+                    @click="saveProperty"
+                  />
+                </div>
+            </q-form>
+          </q-card-section>
+        </q-card>
+      </div>
 
       <!-- Tabla -->
-      <div class="q-mt-md">
-        <q-table
-          flat
-          bordered
-          :rows="filteredProperties"
-          :columns="columns"
-          row-key="id"
-          @row-click="handleRowClick"
-          class="full-width"
-        >
-          <template v-slot:top>
-            <q-input
-              v-model="search"
-              debounce="300"
-              filled
-              placeholder="Buscar propiedades"
-              class="q-mb-md"
-            />
-          </template>
-        </q-table>
-
-        <!-- Botones de Acciones -->
-        <q-btn
-          outline
-          color="primary"
-          label="Editar"
-          icon="edit"
-          class="q-mt-md"
-          :disable="!selectedProperty"
-          @click="loadForEdit"
-        />
-        <q-btn
-          outline
-          color="negative"
-          label="Eliminar"
-          icon="delete"
-          class="q-mt-md"
-          :disable="!selectedProperty"
-          @click="deleteProperty"
-        />
+      <div class="col-12 col-md-10 traza-container">
+        <q-card class="traza-card">
+          <q-card-section>
+            <div class="text-h5 text-bold text-center q-mb-lg traza-title">
+              Propiedades Registradas
+            </div>
+            <q-table
+              :rows="filteredProperties"
+              :columns="columns"
+              row-key="id"
+              class="traza-table"
+              :filter="search"
+              @row-click="handleRowClick"
+            >
+              <template #top>
+                <div class="row full-width items-center q-pa-sm">
+                  <div class="col">
+                    <q-input
+                      v-model="search"
+                      outlined
+                      dense
+                      class="input bg-grey-1"
+                      placeholder="Buscar propiedad"
+                      debounce="300"
+                    />
+                  </div>
+                </div>
+              </template>
+            </q-table>
+              <div class="row q-mt-md botones-inferiores">
+                <BotonEditar
+                  label="Editar"
+                  :disabled="!selectedProperty"
+                  @click="loadForEdit"
+                  class="q-mr-sm"
+                />
+                <BotonEliminar
+                  label="Eliminar"
+                  :disabled="!selectedProperty"
+                  @click="deleteProperty"
+                />
+              </div>          
+          </q-card-section>
+        </q-card>
       </div>
     </div>
   </q-page>
@@ -92,40 +127,48 @@ import { ref, reactive, computed, onMounted } from 'vue';
 import { useQuasar } from 'quasar';
 import { applicationContainer } from 'src/boot';
 import BotonGuardar from 'src/modules/common/ui/components/buttons/BotonGuardar.vue';
-import { ReadPropertyUseCase, CreatePropertyUseCase, DeletePropertyUseCase } from 'src/modules/property/application/use-cases';
+import BotonEditar from 'src/modules/common/ui/components/buttons/EditButton.vue';
+import BotonEliminar from 'src/modules/common/ui/components/buttons/DeleteButton.vue';
+import { ReadPropertyUseCase, CreatePropertyUseCase, DeletePropertyUseCase, UpdatePropertyUseCase } from 'src/modules/property/application/use-cases';
 import { ReadUserUseCase } from 'src/modules/user/application/use-cases/read-user.use-case';
-import { CreatePropertyDto, DeletePropertyDto } from 'src/modules/property/domain/dtos';
-
-interface Propiedad {
-  id: number;
-  noUnidad: string;
-  propietario: string;
-  memo: string;
-}
+import { CreatePropertyDto, DeletePropertyDto, UpdatePropertyDto } from 'src/modules/property/domain/dtos';
+import type { PropertyDto } from 'src/modules/property/domain/dtos';
 
 const $q = useQuasar();
 const readPropertyUseCase = applicationContainer.getFromContainer(ReadPropertyUseCase);
 const createPropertyUseCase = applicationContainer.getFromContainer(CreatePropertyUseCase);
 const deletePropertyUseCase = applicationContainer.getFromContainer(DeletePropertyUseCase);
 const readOwnerUseCase = applicationContainer.getFromContainer(ReadUserUseCase);
+const updatePropertyUseCase = applicationContainer.getFromContainer(UpdatePropertyUseCase);
 
-const propiedades = ref<Propiedad[]>([]);
-const propietarios = ref<{ id: number; nombre: string }[]>([]); // Lista de propietarios desde el caso de uso
-const selectedProperty = ref<Propiedad | null>(null);
+const isSubmitted = ref(false);
+
+const propiedades = ref<PropertyDto[]>([]);
+const propietarios = ref<{ id: number; nombre: string }[]>([]);
+const selectedProperty = ref<PropertyDto | null>(null);
 const search = ref('');
 
-const form = reactive<Partial<Propiedad>>({
+interface PropertyForm {
+  id: number
+  noUnidad: string
+  propietario: string
+  memo: string
+}
+
+const form = reactive<PropertyForm>({
   id: 0,
   noUnidad: '',
   propietario: '',
-  memo: '',
+  memo: ''
 });
 
-// Cargar datos al montar
+const propietariosOptions = computed(() =>
+  propietarios.value.map(p => ({ label: p.nombre, value: String(p.id) }))
+);
 
 // Carga de datos
 const loadData = async () => {
-  $q.loading.show({ message: 'Cargando datos...' });
+  $q.loading.show({ message: 'Cargando propiedades...' });
 
   try {
     // Cargar propietarios
@@ -135,7 +178,7 @@ const loadData = async () => {
       nombre: owner.getFullName(),
     }));
 
-    // Cargar propiedades
+    // Cargar propiedades    
     const propertyResult = await readPropertyUseCase.handle();
     propiedades.value = propertyResult.map(property => {
       const propietarioId = parseInt(property.getPropietario() || '0', 20);
@@ -158,59 +201,57 @@ onMounted(() => {
   void loadData();
 });
 
-// Guardar propiedad
-const onSubmit = async () => {
+const saveProperty = async () => {
+  isSubmitted.value = true;
   if (!form.noUnidad || !form.propietario) {
-    $q.notify({ type: 'negative', message: 'Todos los campos son obligatorios.' });
+    $q.notify({ type: 'negative', message: 'Debe completar los campos obligatorios.' });
     return;
   }
-
   try {
-    $q.loading.show({ message: 'Guardando propiedad...' });
-
-    await createPropertyUseCase.handle(
-      new CreatePropertyDto(
-        form.id ?? 0,
-        form.noUnidad,
-        String(form.propietario),
-        form.memo || ''
-      )
-    );
-
-    await loadData(); // Recargar datos
-    $q.notify({ type: 'positive', message: 'Propiedad guardada correctamente.' });
+    $q.loading.show();
+    if (form.id && form.id !== 0) {
+      await updatePropertyUseCase.handle(
+        new UpdatePropertyDto(form.id, form.noUnidad, form.propietario, form.memo)
+      );
+      $q.notify({ type: 'positive', message: 'Propiedad actualizada correctamente.' });
+    } else {
+      await createPropertyUseCase.handle(
+        new CreatePropertyDto(0, form.noUnidad, form.propietario, form.memo)
+      );
+      $q.notify({ type: 'positive', message: 'Propiedad registrada correctamente.' });
+    }
+    await loadData();
     resetForm();
-  } catch {
-    $q.notify({ type: 'negative', message: 'Error al guardar la propiedad.' });
+  } catch (error) {
+    const err = error as Error;
+    $q.notify({ type: 'negative', message: 'Error al guardar la propiedad: ' + err.message });
   } finally {
     $q.loading.hide();
   }
 };
 
-// Eliminar Propiedad
 const deleteProperty = async () => {
   if (!selectedProperty.value) return;
-
-  const confirmDelete = confirm(`¿Está seguro que desea eliminar la propiedad "${selectedProperty.value.noUnidad}"?`);
-  if (!confirmDelete) return;
-
+  const confirm = window.confirm(`¿Eliminar propiedad "${selectedProperty.value.noUnidad}"?`);
+  if (!confirm) return;
   try {
-    $q.loading.show({ message: 'Eliminando propiedad...' });
-
+    $q.loading.show();
     await deletePropertyUseCase.handle(new DeletePropertyDto(selectedProperty.value.id));
-
-    await loadData(); // Recargar datos
     $q.notify({ type: 'positive', message: 'Propiedad eliminada correctamente.' });
-  } catch {
-    $q.notify({ type: 'negative', message: 'Error al eliminar la propiedad.' });
+    await loadData();
+    resetForm();
+  } catch (error) {
+    const err = error as Error;
+    $q.notify({ type: 'negative', message: 'Error eliminando la propiedad: ' + err.message });
   } finally {
     $q.loading.hide();
   }
 };
 
-// Manejo del formulario
 const loadForEdit = () => {
-  if (selectedProperty.value) Object.assign(form, selectedProperty.value);
+  if (selectedProperty.value) {
+    Object.assign(form, { ...selectedProperty.value });
+  }
 };
 
 const resetForm = () => {
@@ -218,16 +259,18 @@ const resetForm = () => {
   form.noUnidad = '';
   form.propietario = '';
   form.memo = '';
+  isSubmitted.value = false;
+  selectedProperty.value = null;
 };
 
-// Tabla
-const filteredProperties = computed(() => 
-  propiedades.value.filter(property =>
-    Object.values(property).some(value =>
-      String(value).toLowerCase().includes(search.value.toLowerCase())
+const filteredProperties = computed(() => {
+  if (!search.value) return propiedades.value;
+  return propiedades.value.filter(property =>
+    Object.values(property).some(val =>
+      String(val).toLowerCase().includes(search.value.toLowerCase())
     )
-  )
-);
+  );
+});
 
 const columns = [
   { name: 'noUnidad', label: 'No Unidad', field: 'noUnidad', sortable: true },
@@ -235,15 +278,72 @@ const columns = [
   { name: 'memo', label: 'Características', field: 'memo', sortable: false },
 ];
 
-const handleRowClick = (evt: Event, row: Propiedad) => {
+const handleRowClick = (_evt: Event, row: PropertyDto) => {
   selectedProperty.value = row;
 };
-
 </script>
 
-<style scoped>
-.selected {
-  background-color: var(--q-color-primary-light);
-  color: var(--q-color-primary);
+<style scoped lang="scss">
+
+// Fondo general de la vista
+.custom-page {
+  background: var(--background-color-view);
+  min-height: 100vh;
+  padding: 20px; // Espacio interno del contenedor principal
+}
+
+// Contenedor del formulario
+.form-container {
+  max-width: 800px; // Aumentamos el ancho de la sección de formulario
+  width: 100%;
+  
+}
+
+// Contenedor de trazabilidad
+.traza-container {
+  margin: 20px auto; // Centra el contenedor y agrega espaciado vertical
+  
+  width: calc(100% - 40px); // Evita que se desborde horizontalmente
+  padding: 10px; // Espacio interno en el contenedor
+  box-sizing: border-box; // Incluye padding y borde en el ancho
+  
+}
+
+// Tarjeta del formulario
+.form-card {
+  background: var(--background-color);
+  border: 2px solid var(--border-color-dark);
+  border-radius: 8px;
+  width: 100%;
+}
+
+// Tarjeta de trazabilidad
+.traza-card {
+  background: var(--background-color);
+  border: 2px solid var(--border-color-dark);
+  border-radius: 8px;
+  width: 100%;
+  margin-left: 20px;
+
+}
+
+// Encabezado de la tabla
+.traza-table th {
+  background: var(--accent-color);
+  color: #fff;
+}
+
+// Título de trazabilidad
+.traza-title {
+  color: var(--text-primary);
+}
+
+// Estilos para botones posicionados debajo de la tabla
+.botones-inferiores {
+  margin-top: 20px;
+  margin-inline: 20px; // Espacio horizontal
+  display: flex;
+  justify-content: flex-end; // Alinear botones a la derecha
+  
 }
 </style>

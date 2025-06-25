@@ -1,0 +1,1 @@
+export { FineRepository } from './fine.repository';

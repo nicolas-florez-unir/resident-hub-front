@@ -68,10 +68,10 @@ export default defineRouter(function (/* { store, ssrContext } */) {
     const store = useAuthStore();
 
    // Si la ruta es privada y no está autenticado, redirige a login 
-   // if (to.meta.requiresAuth && !store.isAuthenticated) {
-   //   next({ name: PublicRoutesName.Login }); 
-   //   return;
-   // }
+    if (to.meta.requiresAuth && !store.isAuthenticated) {
+      next({ name: PublicRoutesName.Login }); 
+      return;
+    }
 
    // Si la ruta es solo para invitados y está autenticado, redirige al dashboard
     if (to.meta.requiresGuest && store.isAuthenticated) {

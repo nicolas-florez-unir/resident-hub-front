@@ -6,7 +6,7 @@ export class UserEntity {
     private readonly email: string,
     private readonly firstName: string,
     private readonly lastName: string,
-    private readonly phone: string,
+    private readonly phone: number,
     private readonly role: UserRole,
     private readonly password: string,
     private readonly tipoDeIdentificacion: string,
@@ -29,7 +29,7 @@ export class UserEntity {
     return this.lastName;
   }
 
-  public getPhone(): string {
+  public getPhone(): number {
     return this.phone;
   }
 

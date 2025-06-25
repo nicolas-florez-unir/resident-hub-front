@@ -76,7 +76,7 @@ async findAll(): Promise<PropertyEntity[]> {
     return result.map(dto => PropertyEntityMapper.toEntity(dto));
   } catch (error) {
     this.handleError(error, 'Error al buscar todas las propiedades');
-    throw error;
+    return [];
   }
 }
 

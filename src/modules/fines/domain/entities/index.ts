@@ -1,0 +1,1 @@
+export { FineEntity } from './Fine.entity';

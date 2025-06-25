@@ -134,15 +134,15 @@ $border-color-dark: #0b2c47 !default;  // Bordes oscuros
 }
 
 .drop-area {
-  border: 2px dashed $accent-color;
-  background: lighten($accent-color, 38%);
+  border: 2px  var(--accent-color);
+  background: var(--background-color-hover);
   color: $primary-color;
   padding: 24px 0;
   border-radius: 8px;
   transition: border-color 0.2s;
   &:hover {
     border-color: $primary-color;
-    background: lighten($accent-color, 30%);
+    background: var(--background-color-hover);
   }
 }
 

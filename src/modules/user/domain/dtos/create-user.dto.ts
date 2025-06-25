@@ -4,7 +4,7 @@ export class CreateUserDto {
     public readonly email: string,
     public readonly firstName: string,
     public readonly lastName: string,
-    public readonly phone: string,
+    public readonly phone: number,
     public readonly role: string,
     public readonly password: string,
     public readonly tipoDeIdentificacion: string,
@@ -27,7 +27,7 @@ export class CreateUserDto {
     return this.lastName;
   }
 
-  public getPhone(): string {
+  public getPhone(): number {
     return this.phone;
   }
 

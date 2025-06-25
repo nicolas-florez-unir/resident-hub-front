@@ -1,9 +1,9 @@
 export interface UserCreatedDto {
-    id: string;
+    id: number;
     email: string;
     firstName: string;
     lastName: string;
-    phone: string;
+    phone: number;
     role: string;
     password: string;   
     tipoDeIdentificacion: string;

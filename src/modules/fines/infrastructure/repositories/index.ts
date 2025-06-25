@@ -1,0 +1,1 @@
+export {ApiFineRepository} from './api-fine.repository';

@@ -4,7 +4,7 @@ export class UpdateUserDto {
     private readonly email: string,
     private readonly firstName: string,
     private readonly lastName: string,
-    private readonly phone: string,
+    private readonly phone: number,
     private readonly role: string,
     private readonly password: string,
     private readonly tipoDeIdentificacion: string,
@@ -27,7 +27,7 @@ export class UpdateUserDto {
     return this.lastName;
   }
 
-  public getPhone(): string {
+  public getPhone(): number {
     return this.phone;
   }
 

@@ -7,19 +7,27 @@
     background-color: var(--q-primary);
 }
 
+
 :root {
-  --primary-color: #0b2c47;
-  --secondary-color: #145da0;
-  --accent-color: #29a3ff;
-  --background-color: #f8f9fa;
-  --surface-color: #ffffff;
-  --text-primary: #1c1c1c;
-  --text-secondary: #555555;
-  --border-color: #d0d0d0;
-  --background-color-cards:#29a3ff;
-  --background-color-view:#29a3ff;
-  --border-color-dark:#0b2c47;
+--primary-color: #0b2c47;      /* Azul oscuro principal*/
+--secondary-color: #145da0;    /* Azul medio*/
+--accent-color: #29a3ff ;       /* Azul claro/acento*/
+--background-color: #f8f9fa;   /* Fondo claro */
+--background-color-cards: #29a3ff; /* Fondo de paneles o tarjetas*/
+--background-color-view: #29a3ff; /* Fondo de vistas*/
+--surface-color: #ffffff;      /* Paneles y tarjetas*/
+--text-primary: #1c1c1c;       /* Texto principal*/
+--text-secondary: #555555;     /* Texto secundario*/
+--border-color: #d0d0d0;  /* Bordes suaves*/
+--border-color-dark:#0b2c47;  /* Bordes oscuros*/
+--background-color-hover: hsl(209, 89%, 67%); /* Fondo al pasar el mouse*/
+--input-radius: 8px;
+--border-radius: 8px;
+--button-radius: 8px;
+--card-radius: 8px;
+
 }
+
 
 body {
   background-color: var(--background-color);

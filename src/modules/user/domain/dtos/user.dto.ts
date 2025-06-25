@@ -3,7 +3,7 @@ export interface UserDto {
   email: string;
   firstName: string;
   lastName: string;
-  phone: string;
+  phone: number;
   role: string;
   password: string;
   tipoDeIdentificacion: string;

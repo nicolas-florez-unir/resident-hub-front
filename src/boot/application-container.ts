@@ -19,6 +19,19 @@ import { CreateUserUseCase } from 'src/modules/user/application/use-cases/create
 import { ReadUserUseCase } from 'src/modules/user/application/use-cases/read-user.use-case';
 import { UserRepository } from 'src/modules/user/domain/repositories';
 import { ApiUserRepository } from 'src/modules/user/infrastructure/repositories';
+import { PropertyRepository } from 'src/modules/property/domain/repositories';
+import { ApiPropertyRepository } from 'src/modules/property/infraestructure/repositories/api-property.repository';
+import { UpdatePropertyUseCase } from 'src/modules/property/application/use-cases/update-property.use-case';
+import { DeletePropertyUseCase } from 'src/modules/property/application/use-cases/delete-property.use-case';
+import { CreatePropertyUseCase } from 'src/modules/property/application/use-cases/create-property.use-case';
+import { ReadPropertyUseCase } from 'src/modules/property/application/use-cases/read-property.use-case';
+import { UpdateFineUseCase } from 'src/modules/fines/application/use-cases/update-fine.use-case';
+import { DeleteFineUseCase } from 'src/modules/fines/application/use-cases/delete-fine.use-case';
+import { CreateFineUseCase } from 'src/modules/fines/application/use-cases/create-fine.use-case';
+import { ReadFineUseCase } from 'src/modules/fines/application/use-cases/read-fine.use-case';
+import { FineRepository } from 'src/modules/fines/domain/repositories';
+import { ApiFineRepository } from 'src/modules/fines/infrastructure/repositories/api-fine.repository';
+
 
 class ApplicationContainer {
   private readonly container: Container = new Container();
@@ -43,6 +56,14 @@ class ApplicationContainer {
       abstract: CondominiumRepository,
       resolve: ApiCondominiumRepository,
     },
+    {
+      abstract: PropertyRepository,
+      resolve: ApiPropertyRepository,
+    },
+    {
+      abstract: FineRepository,
+      resolve: ApiFineRepository,
+    },
   ];
 
   private readonly useCases: Array<ServiceIdentifier> = [
@@ -55,6 +76,14 @@ class ApplicationContainer {
     GetCondominiumInfoUseCase,
     RefreshAccessTokenUseCase,
     ValidateAccessToken,
+    UpdatePropertyUseCase,
+    DeletePropertyUseCase,  
+    CreatePropertyUseCase,
+    ReadPropertyUseCase,
+    UpdateFineUseCase,
+    DeleteFineUseCase,  
+    CreateFineUseCase,
+    ReadFineUseCase,
   ];
 
   constructor() {

@@ -4,7 +4,7 @@ import PageInicioAdmin from 'src/modules/dashboard/infrastructure/ui/pages/PageI
 import CrearPropietario from 'src/modules/user/infrastructure/ui/pages/CrearPropietario.vue';
 import RegistrarPropiedad from 'src/modules/property/infraestructure/ui/pages/RegistrarPropiedad.vue';
 import DocumentosAdministrativos from 'src/modules/dashboard/infrastructure/ui/pages/DocumentosAdministrativos.vue';
-import GenerarMultas  from 'src/modules/dashboard/infrastructure/ui/pages/GenerarMultas.vue';
+import GenerarMultas  from 'src/modules/fines/infrastructure/ui/pages/GenerarMultas.vue';
 import VisualizarPQRS from 'src/modules/dashboard/infrastructure/ui/pages/VisualizarPQRS.vue';
 import AgendarReuniones from 'src/modules/dashboard/infrastructure/ui/pages/AgendarReuniones.vue';
 
@@ -49,9 +49,9 @@ const privateRoutes: RouteRecordRaw[] = [
       { path: 'registrar-propiedad', name: PrivateRoutesName.RegistrarPropiedad, component: RegistrarPropiedad },
       { path: 'documentos-administrativos', name: PrivateRoutesName.DocumentosAdministrativos, component: DocumentosAdministrativos },
       { path: 'generar-multas', name: PrivateRoutesName.GenerarMultas, component: GenerarMultas },
-      { path: 'visualizar-pqrs', name: PrivateRoutesName.VisualizarPQRS, component: VisualizarPQRS },
-      { path: 'agendar-reuniones', name: PrivateRoutesName.AgendarReuniones, component: AgendarReuniones },
-      { path: 'gestionar-condominio', name: PrivateRoutesName.CondominiumPage, component: CondominiumPage },
+      { path: 'visualizar-pqrs', name: PrivateRoutesName.VisualizarPQRS, component: VisualizarPQRS }, //esta
+      { path: 'agendar-reuniones', name: PrivateRoutesName.AgendarReuniones, component: AgendarReuniones },//esta
+      { path: 'gestionar-condominio', name: PrivateRoutesName.CondominiumPage, component: CondominiumPage }, //esta
       //Rutas del propietario
       { path: 'inicio-propietario', name: PrivateRoutesName.PageInicioPropietario, component: PageInicioPropietario },      
       { path: 'perfil-propietario', name: PrivateRoutesName.PerfilPropietario, component: PerfilPropietario },
