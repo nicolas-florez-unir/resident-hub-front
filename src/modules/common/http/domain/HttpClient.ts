@@ -6,5 +6,6 @@ export abstract class HttpClient {
     config?: { headers: Record<string, string> },
   ): Promise<T>;
   abstract put<T>(url: string, body: object): Promise<T>;
+  abstract patch<T>(url: string, body: object): Promise<T>;
   abstract delete<T>(url: string): Promise<T>;
 }

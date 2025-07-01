@@ -8,6 +8,7 @@ import { UnauthorizedException } from '../../domain/exceptions';
 import { HttpClientException } from 'src/modules/common/http/domain/exceptions/http-client.exception';
 import { UserEntityMapper } from 'src/modules/user/infrastructure/mappers/user-entity.mapper';
 import { ApiAuthEndpoints } from '../endpoints/api/auth.endpoints';
+import { UnknownException } from 'src/modules/common/exceptions/unknown.exception';
 
 @injectable()
 export class ApiAuthRepository extends AuthRepository {
@@ -16,17 +17,25 @@ export class ApiAuthRepository extends AuthRepository {
   }
 
   async login(email: string, password: string): Promise<{ user: UserEntity; accessToken: string }> {
-    const result = await this.httpClient.post<UserAuthenticatedDto>(ApiAuthEndpoints.LOGIN, {
-      email,
-      password,
-    });
+    try {
+      const result = await this.httpClient.post<UserAuthenticatedDto>(ApiAuthEndpoints.LOGIN, {
+        email,
+        password,
+      });
+      const userEntity = UserEntityMapper.toEntity(result.user);
 
-    const userEntity = UserEntityMapper.toEntity(result.user);
+      return {
+        user: userEntity,
+        accessToken: result.accessToken,
+      };
+    } catch (error) {
+      if (error instanceof HttpClientException && error.statusCode === 401) {
+        throw new UnauthorizedException();
+      }
 
-    return {
-      user: userEntity,
-      accessToken: result.accessToken,
-    };
+      console.log('Error during login:', error);
+      throw new UnknownException('An unknown error occurred on login');
+    }
   }
 
   async refreshAccessToken(): Promise<{ user: UserEntity; accessToken: string }> {

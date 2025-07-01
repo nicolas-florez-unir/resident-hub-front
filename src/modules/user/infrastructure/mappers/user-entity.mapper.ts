@@ -11,6 +11,9 @@ export class UserEntityMapper {
       dto.lastName,
       dto.phone,
       UserRoleMapper.toEnum(dto.role),
+      // dto.password,
+      // dto.tipoDeIdentificacion,
+      // dto.numeroDeIdentificacion,
     );
   }
 
@@ -22,6 +25,8 @@ export class UserEntityMapper {
       lastName: entity.getLastName(),
       phone: entity.getPhone(),
       role: entity.getRole(),
+      // tipoDeIdentificacion: entity.getTipoDeIdentificacion(),
+      // numeroDeIdentificacion: entity.getNumeroDeIdentificacion(),
     };
   }
 }

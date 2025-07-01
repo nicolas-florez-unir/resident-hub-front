@@ -12,25 +12,29 @@
             fit="cover"
           />
           <q-item
+            v-for="item in filteredOptions.filter((opt) => !!opt.route)"
+            :key="item.route ?? item.label"
             clickable
             v-ripple
-            v-for="item in filteredOptions"
-            :key="item.route"
             :to="{ name: item.route }"
           >
             <q-item-section avatar>
               <q-icon :name="item.icon" />
             </q-item-section>
-
             <q-item-section> {{ item.label }} </q-item-section>
           </q-item>
 
-          <q-item clickable v-ripple @click="logout">
+          <q-item
+            v-if="filteredOptions.some((opt) => opt.action === 'logout')"
+            clickable
+            v-ripple
+            @click="logout"
+            key="logout"
+          >
             <q-item-section avatar>
               <q-icon name="logout" color="red" />
             </q-item-section>
-
-            <q-item-section> Logout </q-item-section>
+            <q-item-section> Cerrar sesión </q-item-section>
           </q-item>
         </q-list>
       </q-scroll-area>
@@ -68,22 +72,106 @@ import { UserRole } from 'user/domain/enums';
 import HomeHeader from '../components/HomeHeader.vue';
 
 const options = [
+  //Opciones del administrador
   {
-    icon: 'dashboard',
-    label: 'Dashboard',
-    route: PrivateRoutesName.Dashboard,
+    icon: 'home',
+    label: 'Inicio',
+    route: PrivateRoutesName.Admin,
     roles: [UserRole.Administrator],
   },
+  {
+    icon: 'apartment',
+    label: 'Condominio',
+    route: PrivateRoutesName.CondominiumPage,
+    roles: [UserRole.Administrator],
+  },
+  {
+    icon: 'person_add',
+    label: 'Gestión de propietarios',
+    route: PrivateRoutesName.CreateOwner,
+    roles: [UserRole.Administrator],
+  },
+  {
+    icon: 'home_work',
+    label: 'Administrar propiedades',
+    route: PrivateRoutesName.RegisterProperty,
+    roles: [UserRole.Administrator],
+  },
+  {
+    icon: 'gavel',
+    label: 'Generar multas',
+    route: PrivateRoutesName.GenerateFines,
+    roles: [UserRole.Administrator],
+  },
+  {
+    icon: 'description',
+    label: 'Documentos administrativos',
+    route: PrivateRoutesName.AdministrativeDocuments,
+    roles: [UserRole.Administrator],
+  },
+  {
+    icon: 'question_answer',
+    label: 'Visualizar PQRS',
+    route: PrivateRoutesName.ViewRequests,
+    roles: [UserRole.Administrator],
+  },
+  {
+    icon: 'event',
+    label: 'Agendar Reuniones',
+    route: PrivateRoutesName.ScheduleMeetings,
+    roles: [UserRole.Administrator],
+  },
+
+  //Opciones del propietario
+  {
+    icon: 'home',
+    label: 'Inicio',
+    route: PrivateRoutesName.OwnerHomePage,
+    roles: [UserRole.HouseOwner],
+  },
+
   {
     icon: 'person',
     label: 'Perfil',
-    route: PrivateRoutesName.Profile,
+    route: PrivateRoutesName.OwnerProfile,
+    roles: [UserRole.HouseOwner],
   },
+
   {
-    icon: 'room_preferences',
-    label: 'Condominio',
-    route: PrivateRoutesName.Condominium,
-    roles: [UserRole.Administrator],
+    icon: 'description',
+    label: 'Documentos',
+    route: PrivateRoutesName.OwnerDocuments,
+    roles: [UserRole.HouseOwner],
+  },
+
+  {
+    icon: 'gavel',
+    label: 'Multas',
+    route: PrivateRoutesName.OwnerFines,
+    roles: [UserRole.HouseOwner],
+  },
+
+  {
+    icon: 'event',
+    label: 'Reuniones',
+    route: PrivateRoutesName.OwnerMeetings,
+    roles: [UserRole.HouseOwner],
+  },
+
+  {
+    icon: 'question_answer',
+    label: 'PQRS',
+    route: PrivateRoutesName.OwnerRequests,
+    roles: [UserRole.HouseOwner],
+  },
+
+  //Opcion cumún para todos los usuarios
+  {
+    icon: 'logout',
+    label: 'Cerrar sesión',
+    action: 'logout',
+    color: 'red',
+    roles: [UserRole.Administrator, UserRole.HouseOwner],
   },
 ];
 
@@ -100,8 +188,6 @@ const filteredOptions = options.filter((option) => {
 
   return true;
 });
-
-$router.replace({ name: filteredOptions[0]?.route }).catch(() => {});
 
 function toggleLeftDrawer() {
   leftDrawerOpen.value = !leftDrawerOpen.value;

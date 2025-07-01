@@ -6,6 +6,8 @@ export class UpdateUserDto {
     private readonly lastName: string,
     private readonly phone: string,
     private readonly role: string,
+    // private readonly tipoDeIdentificacion: string,
+    // private readonly numeroDeIdentificacion: number,
   ) {}
 
   public getId(): number {

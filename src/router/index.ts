@@ -7,14 +7,19 @@ import {
   createWebHistory,
 } from 'vue-router';
 import authRoutes, { PublicRoutesName } from './auth-routes';
-import privateRoutes, { PrivateRoutesName } from './private-routes';
+import privateRoutes, { PrivateRoutesName } from 'src/router/private-routes'; // Importa las rutas privadas
 import { useAuthStore } from 'src/modules/common/infrastructure/stores/auth.store';
 import ErrorNotFound from 'src/modules/common/infrastructure/ui/pages/ErrorNotFound.vue';
 import UnknownErrorPage from 'src/modules/common/infrastructure/ui/pages/UnknownErrorPage.vue';
+import { UserRole } from 'src/modules/user/domain/enums';
 
 const routes: RouteRecordRaw[] = [
   {
-    path: '/auth',
+    path: '/',
+    redirect: { name: PublicRoutesName.Login }, // Redirige a la página de login por defecto
+  },
+  {
+    path: '/',
     children: authRoutes,
     meta: { requiresGuest: true },
   },
@@ -25,6 +30,7 @@ const routes: RouteRecordRaw[] = [
   },
   {
     path: '/:catchAll(.*)*',
+    name: 'not-found',
     component: ErrorNotFound,
   },
   {
@@ -63,13 +69,30 @@ export default defineRouter(function (/* { store, ssrContext } */) {
   Router.beforeEach((to, from, next) => {
     const store = useAuthStore();
 
+    // Si la ruta es privada y no está autenticado, redirige a login
     if (to.meta.requiresAuth && !store.isAuthenticated) {
-      next(PublicRoutesName.Login); // Si la ruta es privada y no está autenticado, redirige a login
+      next({ name: PublicRoutesName.Login });
       return;
     }
 
+    // Si la ruta tiene roles definidos, verifica si el usuario tiene el rol adecuado
+    if (to.meta.roles && to.meta.roles.length > 0) {
+      const userRole = store.user?.getRole();
+      if (!userRole || !to.meta.roles.includes(userRole)) {
+        // Si el usuario no tiene el rol adecuado, redirige a una página de error
+        next({ name: 'not-found' });
+        return;
+      }
+    }
+
+    // Si la ruta es solo para invitados y está autenticado, redirige al dashboard
     if (to.meta.requiresGuest && store.isAuthenticated) {
-      next(PrivateRoutesName.Home); // Si la ruta es solo para invitados y está autenticado, redirige al dashboard
+      next({
+        name:
+          store.user?.getRole() === UserRole.Administrator
+            ? PrivateRoutesName.Admin
+            : PrivateRoutesName.OwnerHomePage,
+      });
       return;
     }
 

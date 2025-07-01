@@ -3,6 +3,7 @@ import { UserRepository } from '../../domain/repositories/user.repository';
 import { UserEntity } from '../../domain/entities/user.entity';
 import { UpdateUserDto } from '../../domain/dtos/update-user.dto';
 
+
 @injectable()
 export class UpdateUserUseCase {
   constructor(
@@ -11,6 +12,14 @@ export class UpdateUserUseCase {
   ) {}
 
   async handle(dto: UpdateUserDto): Promise<UserEntity> {
-    return await this.userRepository.update(dto);
+    try{
+         return await this.userRepository.update(dto);
+    } catch (error) {
+      console.error('[UpdateUserUseCase] Error:', error);
+      throw new Error('No se pudo actualizar el usuario.');
+    }
   }
 }
+
+
+
