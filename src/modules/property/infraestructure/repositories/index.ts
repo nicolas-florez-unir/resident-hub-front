@@ -1,1 +1,0 @@
-export { ApiPropertyRepository } from './api-property.repository';

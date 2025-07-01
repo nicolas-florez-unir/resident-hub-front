@@ -1,40 +1,39 @@
 import type { RouteRecordRaw } from 'vue-router';
 import HomeLayout from 'src/modules/home/infrastructure/ui/layout/HomeLayout.vue';
-import PageInicioAdmin from 'src/modules/dashboard/infrastructure/ui/pages/PageInicioAdmin.vue';
-import CrearPropietario from 'src/modules/user/infrastructure/ui/pages/CrearPropietario.vue';
-import RegistrarPropiedad from 'src/modules/property/infraestructure/ui/pages/RegistrarPropiedad.vue';
-import DocumentosAdministrativos from 'src/modules/dashboard/infrastructure/ui/pages/DocumentosAdministrativos.vue';
-import GenerarMultas  from 'src/modules/fines/infrastructure/ui/pages/GenerarMultas.vue';
-import VisualizarPQRS from 'src/modules/dashboard/infrastructure/ui/pages/VisualizarPQRS.vue';
-import AgendarReuniones from 'src/modules/dashboard/infrastructure/ui/pages/AgendarReuniones.vue';
+import PageAdmin from 'src/modules/dashboard/infrastructure/ui/pages/PageAdmin.vue';
+import AdministrativeDocuments from 'src/modules/dashboard/infrastructure/ui/pages/AdministrativeDocuments.vue';
+import ViewRequests from 'src/modules/dashboard/infrastructure/ui/pages/ViewRequests.vue';
+import ScheduleMeetings from 'src/modules/dashboard/infrastructure/ui/pages/ScheduleMeetings.vue';
 
 //Rutas del propietario
-import PageInicioPropietario from 'src/modules/dashboard/infrastructure/ui/pages/PageInicioPropietario.vue';
-import PerfilPropietario from 'src/modules/dashboard/infrastructure/ui/pages/PerfilPropietario.vue';
-import DocumentosPropietario from 'src/modules/dashboard/infrastructure/ui/pages/DocumentosPropietario.vue';
-import MultasPropietario from 'src/modules/dashboard/infrastructure/ui/pages/MultasPropietario.vue';
-import PQRSPropietario from 'src/modules/dashboard/infrastructure/ui/pages/PqrsPropietario.vue';
-import ReunionesPropietario from 'src/modules/dashboard/infrastructure/ui/pages/ReunionesPropietario.vue';
+import OwnerHomePage from 'src/modules/dashboard/infrastructure/ui/pages/OwnerHomePage.vue';
+import OwnerProfile from 'src/modules/dashboard/infrastructure/ui/pages/OwnerProfile.vue';
+import OwnerDocuments from 'src/modules/dashboard/infrastructure/ui/pages/OwnerDocuments.vue';
+import OwnerFines from 'src/modules/dashboard/infrastructure/ui/pages/OwnerFines.vue';
+import OwnerRequests from 'src/modules/dashboard/infrastructure/ui/pages/OwnerRequests.vue';
+import OwnerMeetings from 'src/modules/dashboard/infrastructure/ui/pages/OwnerMeetings.vue';
 import CondominiumPage from 'src/modules/condominium/infrastructure/ui/pages/CondominiumPage.vue';
-
-
+import HouseOwnersPage from 'src/modules/house-owners/infrastructure/ui/pages/HouseOwnersPage.vue';
+import HousesPages from 'src/modules/house/infrastructure/ui/pages/HousesPages.vue';
+import { UserRole } from 'src/modules/user/domain/enums';
+import FinesPage from 'src/modules/fines/infrastructure/ui/pages/FinesPage.vue';
 
 export enum PrivateRoutesName {
   //Vistas del propietario
-  PageInicioPropietario = 'PageInicioPropietario',
-  PerfilPropietario = 'PerfilPropietario',
-  DocumentosPropietario = 'DocumentosPropietario',
-  MultasPropietario = 'MultasPropietario',
-  ReunionesPropietario = 'ReunionesPropietario',
-  PQRSPropietario = 'PQRSPropietario',
+  OwnerHomePage = 'OwnerHomePage',
+  OwnerProfile = 'OwnerProfile',
+  OwnerDocuments = 'OwnerDocuments',
+  OwnerFines = 'OwnerFines',
+  OwnerMeetings = 'OwnerMeetings',
+  OwnerRequests = 'OwnerRequests',
   //Vistas del administrador
-  PageInicioAdmin = 'PageInicioAdmin',  
-  CrearPropietario = 'CrearPropietario',
-  RegistrarPropiedad = 'RegistrarPropiedad',
-  DocumentosAdministrativos = 'DocumentosAdministrativos',
-  GenerarMultas = 'GenerarMultas',
-  VisualizarPQRS = 'VisualizarPQRS',
-  AgendarReuniones = 'AgendarReuniones',
+  Admin = 'Admin',
+  CreateOwner = 'CreateOwner',
+  RegisterProperty = 'RegisterProperty',
+  AdministrativeDocuments = 'AdministrativeDocuments',
+  GenerateFines = 'GenerateFines',
+  ViewRequests = 'ViewRequests',
+  ScheduleMeetings = 'ScheduleMeetings',
   CondominiumPage = 'CondominiumPage',
 }
 
@@ -43,22 +42,97 @@ const privateRoutes: RouteRecordRaw[] = [
     path: '',
     component: HomeLayout,
     children: [
-      { path: '', redirect: { name: PrivateRoutesName.PageInicioAdmin } },
-      { path: 'inicio-admin', name: PrivateRoutesName.PageInicioAdmin, component: PageInicioAdmin },
-      { path: 'crear-propietario', name: PrivateRoutesName.CrearPropietario, component: CrearPropietario },
-      { path: 'registrar-propiedad', name: PrivateRoutesName.RegistrarPropiedad, component: RegistrarPropiedad },
-      { path: 'documentos-administrativos', name: PrivateRoutesName.DocumentosAdministrativos, component: DocumentosAdministrativos },
-      { path: 'generar-multas', name: PrivateRoutesName.GenerarMultas, component: GenerarMultas },
-      { path: 'visualizar-pqrs', name: PrivateRoutesName.VisualizarPQRS, component: VisualizarPQRS }, //esta
-      { path: 'agendar-reuniones', name: PrivateRoutesName.AgendarReuniones, component: AgendarReuniones },//esta
-      { path: 'gestionar-condominio', name: PrivateRoutesName.CondominiumPage, component: CondominiumPage }, //esta
+      {
+        path: '',
+        redirect: { name: PrivateRoutesName.Admin },
+        meta: { roles: [UserRole.Administrator] },
+      },
+      {
+        path: 'admin',
+        name: PrivateRoutesName.Admin,
+        component: PageAdmin,
+        meta: { roles: [UserRole.Administrator] },
+      },
+      {
+        path: 'house-owner',
+        name: PrivateRoutesName.CreateOwner,
+        component: HouseOwnersPage,
+        meta: { roles: [UserRole.Administrator] },
+      },
+      {
+        path: 'house',
+        name: PrivateRoutesName.RegisterProperty,
+        component: HousesPages,
+        meta: { roles: [UserRole.Administrator] },
+      },
+      {
+        path: 'documents',
+        name: PrivateRoutesName.AdministrativeDocuments,
+        component: AdministrativeDocuments,
+        meta: { roles: [UserRole.Administrator] },
+      },
+      {
+        path: 'fines',
+        name: PrivateRoutesName.GenerateFines,
+        component: FinesPage,
+        meta: { roles: [UserRole.Administrator] },
+      },
+      {
+        path: 'pqrs',
+        name: PrivateRoutesName.ViewRequests,
+        component: ViewRequests,
+        meta: { roles: [UserRole.Administrator] },
+      },
+      {
+        path: 'meets',
+        name: PrivateRoutesName.ScheduleMeetings,
+        component: ScheduleMeetings,
+        meta: { roles: [UserRole.Administrator] },
+      },
+      {
+        path: 'condominium',
+        name: PrivateRoutesName.CondominiumPage,
+        component: CondominiumPage,
+        meta: { roles: [UserRole.Administrator] },
+      },
+
       //Rutas del propietario
-      { path: 'inicio-propietario', name: PrivateRoutesName.PageInicioPropietario, component: PageInicioPropietario },      
-      { path: 'perfil-propietario', name: PrivateRoutesName.PerfilPropietario, component: PerfilPropietario },
-      { path: 'documentos-propietario', name: PrivateRoutesName.DocumentosPropietario, component: DocumentosPropietario },
-      { path: 'multas-propietario', name: PrivateRoutesName.MultasPropietario, component: MultasPropietario },
-      { path: 'reuniones-propietario', name: PrivateRoutesName.ReunionesPropietario, component: ReunionesPropietario },
-      { path: 'pqrs-propietario', name: PrivateRoutesName.PQRSPropietario, component: PQRSPropietario },
+      {
+        path: 'owner',
+        name: PrivateRoutesName.OwnerHomePage,
+        component: OwnerHomePage,
+        meta: { roles: [UserRole.HouseOwner] },
+      },
+      {
+        path: 'profile',
+        name: PrivateRoutesName.OwnerProfile,
+        component: OwnerProfile,
+        meta: { roles: [UserRole.HouseOwner] },
+      },
+      {
+        path: 'owner-documents',
+        name: PrivateRoutesName.OwnerDocuments,
+        component: OwnerDocuments,
+        meta: { roles: [UserRole.HouseOwner] },
+      },
+      {
+        path: 'owner-fins',
+        name: PrivateRoutesName.OwnerFines,
+        component: OwnerFines,
+        meta: { roles: [UserRole.HouseOwner] },
+      },
+      {
+        path: 'owner-meetings',
+        name: PrivateRoutesName.OwnerMeetings,
+        component: OwnerMeetings,
+        meta: { roles: [UserRole.HouseOwner] },
+      },
+      {
+        path: 'owner-requests',
+        name: PrivateRoutesName.OwnerRequests,
+        component: OwnerRequests,
+        meta: { roles: [UserRole.HouseOwner] },
+      },
     ],
   },
 ];

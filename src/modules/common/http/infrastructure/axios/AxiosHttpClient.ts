@@ -22,8 +22,6 @@ export class AxiosHttpClient extends HttpClient {
       async (error: AxiosError) => {
         const original = error.config as AxiosRequestConfig & { _retry?: boolean };
 
-        console.log(original);
-
         if (
           !this.shouldRetryRequest({
             error,
@@ -55,7 +53,6 @@ export class AxiosHttpClient extends HttpClient {
     if (params.url === undefined || params.isRetry) return false;
 
     const ignoredEndpoints = [ApiAuthEndpoints.LOGIN, ApiAuthEndpoints.REFRESH_ACCESS_TOKEN];
-    console.log(ignoredEndpoints);
     const isIgnoredEndpoint = ignoredEndpoints.some((endpoint) => params.url?.includes(endpoint));
 
     // Si la URL es una de las que no se deben volver a intentar, no se debe volver a intentar
@@ -111,6 +108,15 @@ export class AxiosHttpClient extends HttpClient {
 
   async delete<T>(url: string): Promise<T> {
     const result = await this.instance.delete<T>(url, {
+      headers: {
+        Authorization: `Bearer ${applicationStorage.getItem('accessToken')}`,
+      },
+    });
+    return result.data;
+  }
+
+  async patch<T>(url: string, body: object): Promise<T> {
+    const result = await this.instance.patch<T>(url, body, {
       headers: {
         Authorization: `Bearer ${applicationStorage.getItem('accessToken')}`,
       },

@@ -1,6 +1,5 @@
 import { inject, injectable } from 'inversify';
 import { FineRepository } from '../../domain/repositories/fine.repository';
-import { DeleteFineDto } from '../../domain/dtos/delete-fine.dto';
 
 @injectable()
 export class DeleteFineUseCase {
@@ -9,9 +8,9 @@ export class DeleteFineUseCase {
     private readonly fineRepository: FineRepository,
   ) {}
 
-  async handle(dto: DeleteFineDto): Promise<void> {
+  async handle(id: number): Promise<void> {
     try {
-        await this.fineRepository.delete(dto.getId().toString());
+      await this.fineRepository.delete(id);
     } catch (error) {
       console.error('[DeleteFineUseCase] Error:', error);
       throw new Error('No se pudo eliminar la multa.');

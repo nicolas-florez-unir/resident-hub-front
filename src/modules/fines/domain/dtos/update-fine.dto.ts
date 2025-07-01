@@ -1,34 +1,5 @@
-export class UpdateFineDto {
-  constructor(
-    private readonly id: string,
-    private readonly typeFine: string, // Assuming this is a string representing the type of fine
-    private readonly userId: number, // Assuming this is a string representing the user ID    
-    private readonly amount: number,
-    private readonly description: string,    
-    private readonly status: 'pending' | 'paid' | 'overdue',
-    private readonly createdAt: Date,
-  ) {}
+import type { CreateFineDto } from './create-fine.dto';
 
-    public getId(): string {
-        return this.id;
-    }
-    public getTypeFine(): string {
-        return this.typeFine;
-    }
-    public getUserId(): number {
-        return this.userId;
-    }   
-    public getAmount(): number {
-        return this.amount;
-    }
-    public getDescription(): string {
-        return this.description;
-    }
-    public getStatus(): 'pending' | 'paid' | 'overdue' {
-        return this.status;
-    }
-    public getCreatedAt(): Date {
-        return this.createdAt;
-    }
-
+export interface UpdateFineDto extends CreateFineDto {
+  id: number;
 }

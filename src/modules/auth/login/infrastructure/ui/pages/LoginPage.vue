@@ -1,41 +1,114 @@
 <template>
-  <q-layout view="lHh Lpr lFf">      
-    <q-page-container>
-    <q-page class="custom-page flex flex-center">
-      <div class="login-tittle"> <h1 class="login-tittle-h1">ResidentHub</h1> </div>"
-      <q-card class="login-card">
-        <q-card-section>
-          <q-form @submit="onSubmit" class="q-gutter-md">
-            <div class="welcome-text text-center">Bienvenidos</div>
-            <q-input class="input-text" v-model="form.email" label="Email" type="email" outlined />
-            <q-input class="input-text" v-model="form.password" label="Password" outlined type="password" />
-            <div v-if="errorMessage" class="text-negative q-mb-md">{{ errorMessage }}</div>
-            <div class="row justify-end">
-              <q-btn type="submit" label="Iniciar Sesión" class="login-btn" />
-            </div>
-          </q-form>
-        </q-card-section>
-      </q-card>
-    </q-page>
-    </q-page-container>
-  </q-layout>
+  <!-- Contenedor principal con fondo oscuro, ocupando toda la pantalla -->
+  <div class="fullscreen q-pa-xl flex flex-center">
+    <!-- Contenedor con dos columnas (izquierda: características, derecha: formulario) -->
+    <div
+      class="container row items-start justify-center q-col-gutter-xl"
+      style="max-width: 1200px; width: 100%"
+    >
+      <!-- Columna Izquierda: Descripción de producto/servicio -->
+      <div class="col-12 col-md-6 q-mb-md">
+        <div class="text-h4 q-mb-md">ResidentHub</div>
+
+        <!-- Lista de características -->
+        <q-list separator class="rounded-borders">
+          <q-item>
+            <q-item-section>
+              <div class="text-subtitle1 text-bold">Sistema en la nube</div>
+              <div class="text-body2">
+                Accede a tu información desde cualquier lugar y en cualquier momento, con la
+                seguridad y confiabilidad de un sistema en la nube.
+              </div>
+            </q-item-section>
+          </q-item>
+          <q-item>
+            <q-item-section>
+              <div class="text-subtitle1 text-bold">Soporte de pagos</div>
+              <div class="text-body2">
+                Maneja los soporte de pagos de tu comunidad de forma rápida y sencilla, con una
+                interfaz intuitiva y fácil de usar.
+              </div>
+            </q-item-section>
+          </q-item>
+          <q-item>
+            <q-item-section>
+              <div class="text-subtitle1 text-bold">Administración de multas</div>
+              <div class="text-body2">
+                Administra las multas de tu comunidad de manera eficiente, con herramientas que
+                facilitan el seguimiento y la gestión de sanciones.
+              </div>
+            </q-item-section>
+          </q-item>
+          <q-item>
+            <q-item-section>
+              <div class="text-subtitle1 text-bold">Administración de viviendas</div>
+              <div class="text-body2">
+                Lleva un control detallado de las viviendas de tu comunidad, con información
+                actualizada y accesible para todos los administradores.
+              </div>
+            </q-item-section>
+          </q-item>
+        </q-list>
+      </div>
+
+      <!-- Columna Derecha: Formulario de Inicio de Sesión -->
+      <div class="col-12 col-md-6">
+        <q-card class="q-pa-lg">
+          <!-- Sección de cabecera con título -->
+          <q-card-section>
+            <q-form @submit="onSubmit" class="q-gutter-md">
+              <div class="text-h5 q-mb-lg">Inicia sesión</div>
+              <q-input
+                v-model="form.email"
+                label="Email"
+                type="email"
+                outlined
+                :rules="[
+                  (val) => !!val || 'Email es requerido',
+                  (val) => /.+@.+\..+/.test(val) || 'Email inválido',
+                ]"
+                lazy-rules
+              />
+              <q-input
+                v-model="form.password"
+                label="Contraseña"
+                outlined
+                type="password"
+                :rules="[(val) => !!val || 'Contraseña es requerida']"
+                lazy-rules
+              />
+              <div class="row justify-end">
+                <q-btn type="reset" label="Reset" color="secondary" flat />
+                <q-btn type="submit" label="Login" color="primary" />
+              </div>
+            </q-form>
+          </q-card-section>
+        </q-card>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
-import { reactive } from 'vue';
-import { applicationContainer } from 'src/boot/application-container';
+import { reactive, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useQuasar } from 'quasar';
+import { PrivateRoutesName } from 'router/private-routes';
+import { applicationContainer } from 'src/boot/application-container';
 import { LoginUseCase } from 'auth/login/application/use-cases';
 import { useAuthStore } from 'common/infrastructure/stores/auth.store';
 import { UserRole } from 'user/domain/enums';
-import { ref } from 'vue';
+import { UnauthorizedException } from '../../../domain/exceptions';
+
+const navigationRoles = {
+  [UserRole.Administrator]: PrivateRoutesName.Admin,
+  [UserRole.HouseOwner]: PrivateRoutesName.OwnerHomePage,
+};
 
 const router = useRouter();
 const store = useAuthStore();
 const $q = useQuasar();
-const errorMessage = ref("");
-import { PrivateRoutesName } from 'router/private-routes';
+const errorMessage = ref('');
 
 const loginUseCase = applicationContainer.getFromContainer(LoginUseCase);
 
@@ -50,104 +123,26 @@ const onSubmit = async () => {
   try {
     const { user, accessToken } = await loginUseCase.handle(form.email, form.password);
     store.login(user, accessToken);
-    if (user.getRole() === UserRole.Administrator) {
-      await router.replace({ name: PrivateRoutesName.PageInicioAdmin });
-    } else if (user.getRole() === UserRole.HouseOwner) {
-      await router.replace({ name: PrivateRoutesName.PageInicioPropietario });
-    } else {
-      await router.replace({ name: PrivateRoutesName.PageInicioAdmin });
+
+    // Redirigir al usuario según su rol
+    const userRole = user.getRole();
+    const redirectRoute = navigationRoles[userRole] || 'unknown-error';
+    await router.replace({ name: redirectRoute });
+  } catch (error) {
+    if (error instanceof UnauthorizedException) {
+      $q.notify({
+        type: 'negative',
+        message: 'Credenciales incorrectas. Por favor, verifica tu email y contraseña.',
+      });
+      return;
     }
-  } catch (error: unknown) {
-    // Validación sencilla y segura
-    let status = undefined;
-    if (
-      typeof error === 'object' &&
-      error !== null &&
-      'response' in error &&
-      typeof (error as { response?: { status?: number } }).response === 'object' &&
-      (error as { response?: { status?: number } }).response?.status
-    ) {
-      status = (error as { response: { status: number } }).response.status;
-    }
-    if (status === 401) {
-      errorMessage.value = 'Login o contraseña incorrectos.';
-    } else {
-      errorMessage.value = 'Ha ocurrido un error al iniciar sesión. Por favor, inténtalo de nuevo más tarde.';
-    }
-    console.error('Login error:', error);
+
+    $q.notify({
+      type: 'negative',
+      message: 'Ha ocurrido un error al iniciar sesión. Por favor, inténtalo de nuevo más tarde.',
+    });
   } finally {
     $q.loading.hide();
   }
 };
-
-
 </script>
-
-<style scoped>
-.custom-page {
-  background-color: var(--background-color);
-  color: var(--text-primary);
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-.login-title {
-  margin-bottom: 20px;
-  text-align: center;
-}
-.login-title-h1 {
-  color: var(--primary-color);
-  font-size: 2.5rem;
-  font-weight: bold;
-}
-.login-card {
-  background-color: var(--background-color-cards);
-  width: 400px;
-  padding: 30px;
-  border-radius: 10px;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-  border: 1px solid var(--border-color-dark);
-}
-.welcome-text {
-  color: var(--primary-color);
-  font-size: 1.5rem;
-  font-weight: bold;
-  margin-bottom: 20px;
-  text-align: center;
-}
-.login-btn {
-  background-color: var(--primary-color);
-  color: #fff;
-  width: 100%;
-}
-.login-btn:hover {
-  background-color: var(--secondary-color);
-}
-.input-text :deep(.q-field__control){
-  background-color: var(--background-color)!important;
-
-  transition: box-shadow 0.2s, border-color 0.2s, background-color 0.2s;
-  border-radius: 6px;
-  border: 1px solid var(--border-color, #e0e0e0);
-  box-shadow: none;
-}
-.input-text :deep(.q-field__control:hover),
-.input-text :deep(.q-field__control:focus-within) {
-  box-shadow: 0 0 0 2px var(--primary-color, #1976d2);
-  border-color: var(--primary-color, #1976d2);
-  background-color: var(--background-color) !important;
-}
-.input-text :deep(input) {
-  background: transparent !important;
-  color: var(--text-primary);
-  box-shadow: none;
-}
-
-@media (max-width: 600px) {
-  .login-card {
-    width: 90%;
-  }
-}
-</style>

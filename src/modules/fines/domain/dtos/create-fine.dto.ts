@@ -1,40 +1,13 @@
-export class CreateFineDto {
-  constructor(
-    private readonly id: string,
-    private readonly typeFine: string,
-    private readonly userId: number,
-    private readonly amount: number,
-    private readonly description: string,
-    private readonly status: string,
-    private readonly createdAt: Date,    
-  ) {}
+import type { Currency } from '../enums/currency.enum';
+import type { FineStatus } from '../enums/fine-status.enum';
+import type { FineType } from '../enums/fine-type.enum';
 
-  public getId(): string {
-    return this.id;
-  }
-
-    public getTypeFine(): string {
-        return this.typeFine;
-    }
-
-  public getUserId(): number {
-    return this.userId;
-  }
-
-  public getAmount(): number {
-    return this.amount;
-  }
-
-  public getDescription(): string {
-    return this.description;
-  }
-
-  public getStatus(): string {
-    return this.status;
-  }
-
-  public getCreatedAt(): Date {
-    return this.createdAt;
-  }
-
+export interface CreateFineDto {
+  type: FineType;
+  houseId: number;
+  issuedDate: Date;
+  currency: Currency;
+  amount: number;
+  status: FineStatus;
+  reason: string;
 }

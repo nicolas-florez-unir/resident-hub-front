@@ -1,6 +1,9 @@
 import { CondominiumRepository } from '../../domain/repositories/condominium.repository';
 import { inject, injectable } from 'inversify';
 import { HttpClient } from 'src/modules/common/http/domain/HttpClient';
+import { CondominiumDto } from '../dtos';
+import { CondominiumEntity } from '../../domain/entities/condominium.entity';
+import { CondominiumEntityMapper } from '../mappers/condominium.mapper';
 
 @injectable()
 export class ApiCondominiumRepository extends CondominiumRepository {
@@ -17,7 +20,8 @@ export class ApiCondominiumRepository extends CondominiumRepository {
     await this.httpClient.put('/condominium/logo', formData);
   }
 
-  async getInfo(): Promise<Record<string, unknown>> {
-    return await this.httpClient.get('/condominium/info');
+  async getInfo(): Promise<CondominiumEntity> {
+    const condominium = await this.httpClient.get<CondominiumDto>('/condominium/info');
+    return CondominiumEntityMapper.toEntity(condominium);
   }
 }

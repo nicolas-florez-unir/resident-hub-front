@@ -10,12 +10,7 @@ export class UpdateFineUseCase {
     private readonly fineRepository: FineRepository,
   ) {}
 
-  async handle(dto: UpdateFineDto): Promise<FineEntity> {
-    try {
-      return await this.fineRepository.update(dto);
-    } catch (error) {
-      console.error('[UpdateFineUseCase] Error:', error);
-      throw new Error('No se pudo actualizar la multa.');
-    }
+  async execute(dto: UpdateFineDto): Promise<FineEntity> {
+    return await this.fineRepository.update(dto);
   }
 }

@@ -6,11 +6,11 @@ export abstract class UserRepository {
   // Método para crear un usuario
   abstract create(dto: CreateUserDto): Promise<UserEntity>;
 
-  // Método para actualizar un usuario
+  // Método para actualizar el usuario de la sesión actual
   abstract update(dto: UpdateUserDto): Promise<UserEntity>;
 
-  // Método para obtener todos los usuarios
-  abstract findAll(): Promise<UserEntity[]>;
+  // Método para actualizar un usuario por ID
+  abstract updateById(dto: UpdateUserDto): Promise<UserEntity>;
 
   // Método para obtener un usuario por ID
   abstract findById(id: number): Promise<UserEntity>;
