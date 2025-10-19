@@ -24,13 +24,6 @@
               />
             </div>
           </div>
-          <!-- Actualizar Logo -->
-          <div class="row items-center q-mt-md">
-            <div class="col-5 label">Logo:</div>
-            <div class="col-7">
-              <q-uploader v-model="newLogo" label="Subir logo" accept="image/*" class="input" />
-            </div>
-          </div>
           <!-- Botón Guardar -->
           <div class="row justify-center q-mt-lg">
             <q-btn
