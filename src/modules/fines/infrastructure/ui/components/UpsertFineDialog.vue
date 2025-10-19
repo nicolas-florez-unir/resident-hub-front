@@ -21,8 +21,8 @@
             <q-select
               class="col-12 col-sm-6"
               filled
-              v-model="houseOwnerSelect.selected"
-              :options="houseOwnerSelect.options"
+              v-model="houseSelect.selected"
+              :options="houseSelect.options"
               label="Propiedad"
               emit-value
               map-options
@@ -141,11 +141,11 @@ const props = defineProps<{
   };
 }>();
 const isLoading = ref(false);
-const houseOwnerSelect = ref<{
+const houseSelect = ref<{
   selected: number | null;
   options: QSelectOption<number>[];
 }>({
-  selected: props.fine?.house.owner.id || null,
+  selected: props.fine?.house.id || null,
   options: [],
 });
 const typeSelect = ref<{
@@ -199,7 +199,7 @@ async function loadHouses() {
   try {
     // const houseOwners = await getHouseOwnersUseCase.handle();
     const houses = await getHousesByCondominiumUseCase.execute();
-    houseOwnerSelect.value.options = houses.map((house) => ({
+    houseSelect.value.options = houses.map((house) => ({
       label: house.getHouseNumber(),
       value: house.getId(),
     }));
@@ -223,7 +223,7 @@ async function createFine() {
   await createFineUseCase.execute({
     type: typeSelect.value.selected || FineType.LATE_PAYMENT,
     issuedDate: new Date(issuedDate.value),
-    houseId: houseOwnerSelect.value.selected || 0,
+    houseId: houseSelect.value.selected || 0,
     currency: currencySelect.value.selected || Currency.USD,
     amount: amount.value || 0,
     status: statusSelect.value.selected || FineStatus.PENDING,
