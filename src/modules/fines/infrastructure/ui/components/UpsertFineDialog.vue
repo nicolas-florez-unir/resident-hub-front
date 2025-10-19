@@ -240,7 +240,7 @@ async function updateFine() {
     id: props.fine.id,
     type: typeSelect.value.selected || FineType.LATE_PAYMENT,
     issuedDate: new Date(issuedDate.value),
-    houseId: houseOwnerSelect.value.selected || 0,
+    houseId: props.fine.house.id,
     currency: currencySelect.value.selected || Currency.USD,
     amount: parseInt(amount.value.toString()) || 0,
     status: statusSelect.value.selected || FineStatus.PENDING,
