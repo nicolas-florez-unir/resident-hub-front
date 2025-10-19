@@ -49,4 +49,9 @@ export class ApiFineRepository extends FineRepository {
   async delete(id: number): Promise<void> {
     await this.httpClient.delete(`/fine/${id}`);
   }
+
+  async findByUser(): Promise<FineEntity[]> {
+    const result = await this.httpClient.get<FineDto[]>(`/fine/by-user`);
+    return result.map((dto) => FineEntityMapper.toEntity(dto));
+  }
 }

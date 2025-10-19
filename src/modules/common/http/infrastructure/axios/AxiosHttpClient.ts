@@ -107,12 +107,22 @@ export class AxiosHttpClient extends HttpClient {
   }
 
   async delete<T>(url: string): Promise<T> {
-    const result = await this.instance.delete<T>(url, {
-      headers: {
-        Authorization: `Bearer ${applicationStorage.getItem('accessToken')}`,
-      },
-    });
-    return result.data;
+    try {
+      const result = await this.instance.delete<T>(url, {
+        headers: {
+          Authorization: `Bearer ${applicationStorage.getItem('accessToken')}`,
+        },
+      });
+      return result.data;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        throw new HttpClientException(
+          error.cause?.message ?? 'Error on Delete Request',
+          error.response?.status ?? 500,
+        );
+      }
+      throw new UnknownException(`Error on Delete Request`);
+    }
   }
 
   async patch<T>(url: string, body: object): Promise<T> {

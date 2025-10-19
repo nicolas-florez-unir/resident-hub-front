@@ -5,6 +5,8 @@ import { UserRepository } from '../../domain/repositories/user.repository';
 import { UserEntity } from '../../domain/entities/user.entity';
 import { UserEntityMapper } from '../mappers/user-entity.mapper';
 import { CreateUserDto, UpdateUserDto, UserDto } from '../../domain/dtos';
+import { HttpClientException } from 'src/modules/common/http/domain/exceptions/http-client.exception';
+import { UserDeletionNotAllowedException } from '../../domain/exceptions/user-deletion-not-allowed.exception';
 
 @injectable()
 export class ApiUserRepository extends UserRepository {
@@ -65,6 +67,11 @@ export class ApiUserRepository extends UserRepository {
     try {
       await this.httpClient.delete<void>(`/user/${id}`);
     } catch (error) {
+      if (error instanceof HttpClientException && error.statusCode === 409) {
+        throw new UserDeletionNotAllowedException(
+          'No se puede eliminar el usuario porque tiene dependencias.',
+        );
+      }
       console.log(`Error al eliminar el usuario con ID: ${id}`, error);
       throw error;
     }

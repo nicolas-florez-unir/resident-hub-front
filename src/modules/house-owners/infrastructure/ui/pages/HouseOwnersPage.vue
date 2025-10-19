@@ -42,6 +42,7 @@ import { useQuasar } from 'quasar';
 import type { QTableProps } from 'quasar';
 import UpsertHouseOwnerDialog from '../components/UpsertHouseOwnerDialog.vue';
 import { DeleteHouseOwnerUseCase } from '../../../application/use-cases/delete-house-owner.use-case';
+import { UserDeletionNotAllowedException } from 'src/modules/user/domain/exceptions/user-deletion-not-allowed.exception';
 
 const $q = useQuasar();
 const getHouseOwnersUseCase = applicationContainer.getFromContainer(GetHouseOwnersUseCase);
@@ -123,6 +124,19 @@ async function deleteHouseOwnerModal(id: number) {
     });
     void loadHouseOwners();
   } catch (error) {
+    if (error instanceof UserDeletionNotAllowedException) {
+      $q.dialog({
+        title: 'Error al eliminar propietario',
+        message:
+          'No se puede eliminar el propietario porque tiene dependencias. Verifica que no tenga casas asociadas.',
+        ok: {
+          label: 'Aceptar',
+          color: 'primary',
+        },
+      });
+      return;
+    }
+
     $q.notify({
       type: 'negative',
       message: 'Error al eliminar propietario: ' + (error as Error).message,

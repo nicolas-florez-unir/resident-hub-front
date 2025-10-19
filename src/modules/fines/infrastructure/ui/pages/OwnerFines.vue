@@ -92,7 +92,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { applicationContainer } from 'src/boot';
+import { GetFinesByUserUseCase } from 'src/modules/fines/application/use-cases/get-fines-by-user.use-case';
+import { ref, onMounted } from 'vue';
+
+const getFinesByUserUseCase = applicationContainer.getFromContainer(GetFinesByUserUseCase);
 
 const tipoDocumento = ref('');
 const descripcion = ref('');
@@ -100,5 +104,19 @@ const descripcion = ref('');
 function subirDocumento() {
   // Lógica para subir el documento
   console.log('Subiendo documento...');
+}
+
+onMounted(() => {
+  // Inicialización o carga de datos si es necesario
+  void fetchFines();
+});
+
+async function fetchFines() {
+  try {
+    const fines = await getFinesByUserUseCase.handle();
+    console.log('Fines fetched:', fines);
+  } catch (error) {
+    console.error('Error fetching fines:', error);
+  }
 }
 </script>

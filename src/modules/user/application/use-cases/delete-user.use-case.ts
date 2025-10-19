@@ -9,12 +9,12 @@ export class DeleteUserUseCase {
     private readonly userRepository: UserRepository,
   ) {}
 
-    async handle(dto: DeleteUserDto): Promise<void> {
-        try {
-        await this.userRepository.delete(dto.getId());        
-        } catch (error) {
-        console.error('[DeleteUserUseCase] Error:', error);
-        throw new Error('No se pudo eliminar el usuario.');
-        }
+  async handle(dto: DeleteUserDto): Promise<void> {
+    try {
+      await this.userRepository.delete(dto.getId());
+    } catch (error) {
+      console.error('[DeleteUserUseCase] Error:', error);
+      throw new Error('No se pudo eliminar el usuario.');
     }
+  }
 }

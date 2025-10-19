@@ -9,7 +9,7 @@ import ScheduleMeetings from 'src/modules/dashboard/infrastructure/ui/pages/Sche
 import OwnerHomePage from 'src/modules/dashboard/infrastructure/ui/pages/OwnerHomePage.vue';
 import OwnerProfile from 'src/modules/dashboard/infrastructure/ui/pages/OwnerProfile.vue';
 import OwnerDocuments from 'src/modules/dashboard/infrastructure/ui/pages/OwnerDocuments.vue';
-import OwnerFines from 'src/modules/dashboard/infrastructure/ui/pages/OwnerFines.vue';
+import OwnerFines from 'src/modules/fines/infrastructure/ui/pages/OwnerFines.vue';
 import OwnerRequests from 'src/modules/dashboard/infrastructure/ui/pages/OwnerRequests.vue';
 import OwnerMeetings from 'src/modules/dashboard/infrastructure/ui/pages/OwnerMeetings.vue';
 import CondominiumPage from 'src/modules/condominium/infrastructure/ui/pages/CondominiumPage.vue';

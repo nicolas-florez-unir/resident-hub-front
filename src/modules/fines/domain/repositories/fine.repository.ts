@@ -14,4 +14,6 @@ export abstract class FineRepository {
 
   // Método para eliminar una multa
   abstract delete(id: number): Promise<void>;
+
+  abstract findByUser(): Promise<FineEntity[]>;
 }

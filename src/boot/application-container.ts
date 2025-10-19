@@ -37,6 +37,7 @@ import { CreateHouseUseCase } from 'src/modules/house/application/use-cases/crea
 import { DeleteHouseUseCase } from 'src/modules/house/application/use-cases/delete-house.use-case';
 import { UpdateHouseUseCase } from 'src/modules/house/application/use-cases/update-house.use-case';
 import { GetFinesUseCase } from 'src/modules/fines/application/use-cases/get-fines.use-case';
+import { GetFinesByUserUseCase } from 'src/modules/fines/application/use-cases/get-fines-by-user.use-case';
 
 class ApplicationContainer {
   private readonly container: Container = new Container();
@@ -97,6 +98,7 @@ class ApplicationContainer {
     DeleteHouseUseCase,
     UpdateHouseUseCase,
     GetFinesUseCase,
+    GetFinesByUserUseCase,
   ];
 
   constructor() {
